@@ -1,0 +1,11 @@
+const express=require("express");
+const router=express.Router();
+const {auth,isAdmin,isStudent}=require("../middlewares/auth");
+const {updateProfile,deleteAccount,updateProfilePicture,getUserDetails,getAllUserDetails,getEnrolledCourses}=require("../Controllers/Profile");
+router.delete("/deleteAccount",auth,deleteAccount);
+router.put("/updateProfile",auth,updateProfile);
+router.put("/updateProfilePicture",auth,updateProfilePicture);
+router.get("/getUser",auth,getUserDetails);
+router.get("/getAllUser",auth,isAdmin,getAllUserDetails);
+router.get("/getEnrolledCourses",auth,isStudent,getEnrolledCourses);
+module.exports=router;
