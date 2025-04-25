@@ -1,31 +1,131 @@
-# React & Tailwind CSS Starter Pack
+# Eduvate
 
-This is a starter pack for creating React projects with Tailwind CSS configured. It uses React version **18.2** and Tailwind CSS version **3.2**.
+**Eduvate** is a full-stack online learning platform designed to help students discover and enroll in a variety of courses, while also enabling instructors to sell their courses — inspired by platforms like Unacademy and Coursera.
 
-## Usage
+> 🚧 Eduvate is currently under active development. Backend is ~80% complete, and the student-facing frontend is nearly done.
 
-This starter pack includes a basic setup for using **Tailwind CSS with React**. To start building your own components and styles, follow these steps:
+---
 
-1. Clone the repository to your local machine.
-    ```sh
-    git clone https://github.com/thepranaygupta/react-tailwind-css-starter-pack.git
-    ```
 
-1. Install the required packages.
-    ```sh
-    cd react-tailwind-css-starter-pack
-    npm install
-    ```
+## 🎥 Sneak Peek
 
-1. Start the development server.
-    ```sh
-    npm start
-    ```
-1. Open the project in your browser at [`http://localhost:3000`](http://localhost:3000) to view your project.
-1. Create your React components and add your styles using Tailwind classes. You can also create new CSS files and import them into your components.
 
-The project is set up to use `postcss-cli` to process your CSS files. You can add your own `tailwind.config.js` file to customize your Tailwind setup.
+![Eduvate-Brave2025-04-2514-35-37-ezgif com-optimize_uhx1bt](https://github.com/user-attachments/assets/8d25d27c-a322-41c8-b502-41d6c2b784cf)
 
-## Contributing
+## Login/Logout 
+![ezgif com-crop](https://github.com/user-attachments/assets/6510e0fe-28b1-4930-9b0a-df25d9587017)
 
-Contributions are welcome! If you have any suggestions or find any issues, please feel free to open an issue or a pull request.
+
+## ✨ Features
+
+- 🎥 Video Lectures
+- 📚 Course Enrollment
+- 📊 Progress Tracking
+- 💡 Clean and Responsive UI
+- 🌐 Full Stack Project (MERN Stack)
+
+---
+
+
+## 💪 Tech Stack
+
+### Frontend
+- React
+- Tailwind CSS
+- Redux Toolkit
+- React Router DOM
+- React Hook Form
+- Axios
+- React Hot Toast
+- React Icons
+- Type Animation
+- OTP Input
+- Progress Bar
+
+### Backend
+- Node.js
+- Express
+- MongoDB
+- Dotenv
+
+### Tools & Utilities
+- Concurrently (to run client and server)
+- Razorpay (to be integrated for payment)
+- React Scripts (CRA)
+
+---
+
+## 📁 Project Structure
+
+```bash
+eduvate/
+│
+├── Frontend/           # React + Tailwind frontend
+├── Backend/            # Node.js + Express + MongoDB backend
+└── package.json        # Combined start scripts using concurrently
+```
+
+---
+
+## ⚙️ Setup & Running the Project Locally
+
+### Prerequisites
+
+- Node.js (v18+)
+- npm (v9+)
+- MongoDB (local or cloud, like MongoDB Atlas)
+
+### Getting Started
+
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/your-username/eduvate.git
+   cd eduvate
+   ```
+
+2. **Install Frontend & Backend Dependencies**
+   ```bash
+   npm install         # Installs frontend dependencies
+   cd Backend
+   npm install         # Installs backend dependencies
+   ```
+
+3. **Setup Environment Variables**
+   - Create a `.env` file inside `Backend/`
+   - Add required MongoDB and JWT configs (e.g., `MONGO_URI`, `JWT_SECRET`, etc.)
+
+4. **Run Both Servers Concurrently**
+   ```bash
+   npm run dev
+   ```
+
+---
+
+## 🚀 Deployment
+
+Deployment is not yet done. This section will be updated when the project is deployed.
+
+---
+
+## 🎯 Upcoming Features
+
+- Instructor dashboard
+- Admin panel
+- Razorpay payment integration
+- Embedded video preview (YouTube/Cloud storage)
+
+---
+
+
+---
+
+## 📄 License
+
+This project is unlicensed as of now and not open to public contributions.
+
+---
+
+## 👌 Acknowledgements
+
+Created with ❤️ by **Shantanu Agarwal**  
+For queries or suggestions, feel free to connect!
