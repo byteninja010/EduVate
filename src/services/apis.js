@@ -22,5 +22,12 @@ export const settingsEndpoints={
 
 export const courseEndpoints={
     GET_COURSES_BY_CATEGORY:BASE_URL+"/course/coursesByCategory",
+    GET_COURSE_DETAILS:BASE_URL+"/course/getCourseDetails"
+}
+
+export const courseProgressEndpoints={
+    UPDATE_COURSE_PROGRESS:BASE_URL+"/courseProgress/updateCourseProgress",
+    GET_COURSE_PROGRESS:BASE_URL+"/courseProgress/getCourseProgress",
+    GET_ALL_COURSE_PROGRESS:BASE_URL+"/courseProgress/getAllCourseProgress"
 }
   

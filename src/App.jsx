@@ -14,6 +14,7 @@
   import Settings from "./Components/Core/Dashboard/Settings";
   import EnrolledCourse from "./Components/Core/Dashboard/EnrolledCourse";
   import Catalog from "./pages/Catalog";
+  import CourseDetails from "./pages/CourseDetails";
   function App() {
     return (
       <Provider store={appStore}>
@@ -32,6 +33,7 @@
             <Route path="enrolled-courses" element={<EnrolledCourse/>}/>
         </Route>
         <Route path="/catalog/:catalogName" element={<Catalog/>}></Route>
+        <Route path="/course/:courseId" element={<CourseDetails/>}></Route>
       </Routes>
       {/* <Footer/> */}
     </div>

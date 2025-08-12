@@ -3,6 +3,7 @@ const categoryModel = require("../Models/category");
 const userModel = require("../Models/users");
 const sectionModel = require("../Models/section");
 const subSectionModel = require("../Models/subSection");
+const ratingAndReviewsModel=require("../Models/ratingAndReviews");
 const { uploadImageCloudinary } = require("../utils/imageUploader");
 const { convertSecondsToDuration } = require("../utils/secToDuration");
 const { json } = require("express");
