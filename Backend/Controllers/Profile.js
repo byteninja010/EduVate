@@ -178,12 +178,17 @@ exports.getEnrolledCourses = async (req, res) => {
       .findById({ _id: userID })
       .populate({
         path: "courses",
-        populate: {
-          path: "courseContent",
-          populate: {
-            path: "subSection",
+        populate: [
+          {
+            path: "courseContent",
+            populate: {
+              path: "subSection",
+            },
           },
-        },
+          {
+            path: "studentsEnrolled",
+          }
+        ],
       })
       .exec();
       if(!userDetails){

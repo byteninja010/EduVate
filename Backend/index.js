@@ -10,6 +10,7 @@ const {cloudinaryConnect}=require("./config/cloudinary");
 const userRoutes=require("./Routes/userRoutes");
 const profileRoutes=require("./Routes/profileRoutes");
 const courseRoutes=require("./Routes/courseRoutes");
+const courseProgressRoutes=require("./Routes/courseProgressRoutes");
 const contactRoutes=require("./Routes/contactRoutes");
 app.use(express.json());
 app.use(
@@ -33,7 +34,7 @@ cloudinaryConnect();
 app.use("/api/v1/auth",userRoutes);
 app.use("/api/v1/profile",profileRoutes);
 app.use("/api/v1/course",courseRoutes);
-app.use("/api/v1/course",courseRoutes);
+app.use("/api/v1/courseProgress",courseProgressRoutes);
 app.use("/api/v1/contact",contactRoutes);
 
 

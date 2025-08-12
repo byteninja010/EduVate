@@ -13,8 +13,9 @@
   import MyProfile from "./Components/Core/Dashboard/MyProfile";
   import Settings from "./Components/Core/Dashboard/Settings";
   import EnrolledCourse from "./Components/Core/Dashboard/EnrolledCourse";
-  import Catalog from "./pages/Catalog";
-  import CourseDetails from "./pages/CourseDetails";
+import EnrolledCourseView from "./pages/EnrolledCourseView";
+import Catalog from "./pages/Catalog";
+import CourseDetails from "./pages/CourseDetails";
   function App() {
     return (
       <Provider store={appStore}>
@@ -34,6 +35,7 @@
         </Route>
         <Route path="/catalog/:catalogName" element={<Catalog/>}></Route>
         <Route path="/course/:courseId" element={<CourseDetails/>}></Route>
+        <Route path="/enrolled-course/:courseId" element={<EnrolledCourseView/>}></Route>
       </Routes>
       {/* <Footer/> */}
     </div>
