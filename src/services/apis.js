@@ -1,6 +1,7 @@
-const BASE_URL=process.env.REACT_APP_BASE_URL
+const BASE_URL="http://localhost:4000/api/v1"
 export const categories={
-    CATEGORIES_API:BASE_URL+"/course/showAllCategories"
+    CATEGORIES_API:BASE_URL+"/course/showAllCategories",
+    SHOW_ALL_CATEGORIES:BASE_URL+"/course/showAllCategories"
 }
 export const endpoints = {
     SENDOTP_API: BASE_URL + "/auth/sendotp",
@@ -22,12 +23,28 @@ export const settingsEndpoints={
 
 export const courseEndpoints={
     GET_COURSES_BY_CATEGORY:BASE_URL+"/course/coursesByCategory",
-    GET_COURSE_DETAILS:BASE_URL+"/course/getCourseDetails"
+    GET_COURSE_DETAILS:BASE_URL+"/course/getCourseDetails",
+    CREATE_COURSE:BASE_URL+"/course/createCourse",
+    EDIT_COURSE:BASE_URL+"/course/editCourse",
+    DELETE_COURSE:BASE_URL+"/course/deleteCourse",
+    GET_INSTRUCTOR_COURSES:BASE_URL+"/course/getInstructorCourses",
+    CREATE_SECTION:BASE_URL+"/course/addSection",
+    UPDATE_SECTION:BASE_URL+"/course/updateSection",
+    DELETE_SECTION:BASE_URL+"/course/deleteSection",
+    CREATE_SUBSECTION:BASE_URL+"/course/createSubSection",
+    UPDATE_SUBSECTION:BASE_URL+"/course/updateSubSection",
+    DELETE_SUBSECTION:BASE_URL+"/course/deleteSubSection"
 }
 
 export const courseProgressEndpoints={
     UPDATE_COURSE_PROGRESS:BASE_URL+"/courseProgress/updateCourseProgress",
-    GET_COURSE_PROGRESS:BASE_URL+"/courseProgress/getCourseProgress",
-    GET_ALL_COURSE_PROGRESS:BASE_URL+"/courseProgress/getAllCourseProgress"
+    GET_COURSE_PROGRESS:BASE_URL+"/courseProgress/getCourseProgress"
+}
+
+export const walletEndpoints = {
+    GET_WALLET: BASE_URL + "/wallet/getWallet",
+    PURCHASE_COURSE: BASE_URL + "/wallet/purchaseCourse",
+    ADD_MONEY: BASE_URL + "/wallet/addMoney",
+    GET_INSTRUCTOR_REVENUE: BASE_URL + "/wallet/getInstructorRevenue"
 }
   

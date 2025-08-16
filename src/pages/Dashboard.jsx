@@ -3,12 +3,13 @@ import { useSelector } from 'react-redux'
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../Components/Core/Dashboard/Sidebar';
 const Dashboard = () => {
-    const loading1=useSelector((state)=>state.auth.loading);
-    const loading2=useSelector((state)=>state.auth.loading2);
-    if(loading1 || loading2){
+    const loading = useSelector((state) => state.auth.loading);
+    
+    if(loading){
         return <div className='spinner mx-auto flex justify-center items-center'></div>
     }
-  return (
+    
+    return (
     <div className='relative flex min-h-[calc(100vh-3.5rem)]'>
         <Sidebar/>
         <div className="h-[calc(100vh-3.5rem)] flex-1 overflow-auto">

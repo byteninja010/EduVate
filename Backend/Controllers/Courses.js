@@ -134,11 +134,8 @@ exports.editCourse = async (req, res) => {
 
     for (const key in updates) {
       if (key != courseId) {
-        if (key == "category") {
-          course[key] = JSON.parse(updates[key]);
-        } else {
-          course[key] = updates[key];
-        }
+        // Don't try to parse category as JSON since it's already a string (category ID)
+        course[key] = updates[key];
       }
     }
     await course.save();

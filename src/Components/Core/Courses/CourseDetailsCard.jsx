@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import copy from "copy-to-clipboard"
 import { toast } from "react-hot-toast"
 import { BsFillCaretRightFill } from "react-icons/bs"
@@ -7,13 +7,14 @@ import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { addItem } from "../../../slices/cartSlice"
 import { ACCOUNT_TYPE } from "../../../utils/constants"
-
+import { purchaseCourse } from "../../../services/operations/walletAPI"
 
 function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
   const { user } = useSelector((state) => state.profile)
   const { token } = useSelector((state) => state.auth)
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const [purchasing, setPurchasing] = useState(false)
 
   const {
     thumbnail: ThumbnailImage,
@@ -26,6 +27,39 @@ function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
     toast.success("Link copied to clipboard")
   }
 
+  const handleBuyWithWallet = async () => {
+    if (!token) {
+      setConfirmationModal({
+        txt1: "You are not logged in!",
+        txt2: "Please login to purchase this course",
+        btn1Txt: "Login",
+        btn2Txt: "Cancel",
+        btn1onClick: () => navigate("/login"),
+        btn2onClick: () => setConfirmationModal(null),
+      })
+      return
+    }
+
+    if (user && user?.accountType === ACCOUNT_TYPE.INSTRUCTOR) {
+      toast.error("You are an Instructor. You can't buy a course.")
+      return
+    }
+
+    setPurchasing(true)
+    try {
+      const response = await purchaseCourse(courseId, token)
+      if (response.success) {
+        toast.success("Course purchased successfully!")
+        // Refresh the page to show "Go To Course" button
+        window.location.reload()
+      }
+    } catch (error) {
+      console.error('Failed to purchase course:', error)
+    } finally {
+      setPurchasing(false)
+    }
+  }
+
   const handleAddToCart = () => {
     if (user && user?.accountType === ACCOUNT_TYPE.INSTRUCTOR) {
       toast.error("You are an Instructor. You can't buy a course.")
@@ -36,12 +70,12 @@ function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
       return
     }
     setConfirmationModal({
-      text1: "You are not logged in!",
-      text2: "Please login to add To Cart",
-      btn1Text: "Login",
-      btn2Text: "Cancel",
-      btn1Handler: () => navigate("/login"),
-      btn2Handler: () => setConfirmationModal(null),
+      txt1: "You are not logged in!",
+      txt2: "Please login to add To Cart",
+      btn1Txt: "Login",
+      btn2Txt: "Cancel",
+      btn1onClick: () => navigate("/login"),
+      btn2onClick: () => setConfirmationModal(null),
     })
   }
 
@@ -69,12 +103,13 @@ function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
               onClick={
                 user && course?.studentsEnrolled.includes(user?._id)
                   ? () => navigate("/dashboard/enrolled-courses")
-                  : handleBuyCourse
+                  : handleBuyWithWallet
               }
+              disabled={purchasing}
             >
               {user && course?.studentsEnrolled.includes(user?._id)
                 ? "Go To Course"
-                : "Buy Now"}
+                : purchasing ? "Purchasing..." : "Buy with Wallet"}
             </button>
             {(!user || !course?.studentsEnrolled.includes(user?._id)) && (
               <button onClick={handleAddToCart} className="blackButton">

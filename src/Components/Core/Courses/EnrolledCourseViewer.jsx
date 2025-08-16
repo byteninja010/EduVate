@@ -79,6 +79,8 @@ const EnrolledCourseViewer = ({ course }) => {
     console.log("🔍 DEBUG - handleVideoCompleted called with subSectionId:", subSectionId);
     console.log("🔍 DEBUG - Current videoProgress state:", videoProgress);
     console.log("🔍 DEBUG - Current courseProgress state:", courseProgress);
+    console.log("🔍 DEBUG - Course ID:", course._id);
+    console.log("🔍 DEBUG - Token available:", !!token);
     
     // Prevent multiple calls if already completed or currently processing
     if (videoProgress[subSectionId] || isMarkingComplete) {
@@ -96,14 +98,14 @@ const EnrolledCourseViewer = ({ course }) => {
       if (response.success) {
         console.log("🔍 DEBUG - Video marked successfully, updating local state...");
         
-        // Simple state update - add this video to completed list
+        // Update local state with the new completion
         setVideoProgress(prev => {
           const newState = { ...prev, [subSectionId]: true };
           console.log("🔍 DEBUG - New videoProgress state:", newState);
           return newState;
         });
         
-        // Simple progress calculation
+        // Calculate new progress
         const totalVideos = course.courseContent?.reduce((total, section) => 
           total + (section.subSection?.length || 0), 0
         ) || 0;
@@ -119,11 +121,24 @@ const EnrolledCourseViewer = ({ course }) => {
         
         setCourseProgress(newProgress);
         toast.success("Video marked as completed!");
+      } else {
+        console.error("🔍 DEBUG - API returned success: false:", response);
+        toast.error(response.message || "Failed to mark video as completed");
       }
     } catch (error) {
-      console.error("Error marking video as completed:", error);
-      // Only show error toast if it's not already completed
-      if (!videoProgress[subSectionId]) {
+      console.error("🔍 DEBUG - Error marking video as completed:", error);
+      console.error("🔍 DEBUG - Error details:", {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status
+      });
+      
+      // Show user-friendly error message
+      if (error.response?.status === 403) {
+        toast.error("You are not enrolled in this course. Please purchase it first.");
+      } else if (error.response?.status === 404) {
+        toast.error("Course not found. Please refresh the page.");
+      } else {
         toast.error("Failed to mark video as completed. Please try again.");
       }
     } finally {
