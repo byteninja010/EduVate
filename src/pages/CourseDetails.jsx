@@ -9,6 +9,7 @@ import Footer from "../Components/Common/Footer"
 import RatingStars from "../Components/Common/RatingStars"
 import CourseAccordionBar from "../Components/Core/Courses/CourseAccordionBar"
 import CourseDetailsCard from "../Components/Core/Courses/CourseDetailsCard"
+import CourseRatingReview from "../Components/Core/Courses/CourseRatingReview"
 import { fetchCourseDetails } from "../services/operations/courseDetailsApi"
 import { addItem } from "../slices/cartSlice"
 //import { buyCourse } from "../services/operations/studentFeaturesAPI"
@@ -47,9 +48,14 @@ function CourseDetails() {
 
   // Calculating Avg Review count
   const [avgReviewCount, setAvgReviewCount] = useState(0)
+  const [totalRatings, setTotalRatings] = useState(0)
+  
   useEffect(() => {
-    const count = GetAvgRating(response?.data?.courseDetails.ratingAndReviews)
-    setAvgReviewCount(count)
+    if (response?.data?.courseDetails?.ratingAndReviews) {
+      const count = GetAvgRating(response.data.courseDetails.ratingAndReviews)
+      setAvgReviewCount(count)
+      setTotalRatings(response.data.courseDetails.ratingAndReviews.length)
+    }
   }, [response])
   // console.log("avgReviewCount: ", avgReviewCount)
 
@@ -170,7 +176,7 @@ function CourseDetails() {
               <div className="text-md flex flex-wrap items-center gap-2">
                 <span className="text-yellow-25">{avgReviewCount}</span>
                 <RatingStars Review_Count={avgReviewCount} Star_Size={24} />
-                <span>{`(${ratingAndReviews.length} reviews)`}</span>
+                <span>{`(${totalRatings} reviews)`}</span>
                 <span>{`${studentsEnrolled.length} students enrolled`}</span>
               </div>
               <div>
@@ -179,10 +185,6 @@ function CourseDetails() {
                 </p>
               </div>
               <div className="flex flex-wrap gap-5 text-lg">
-                <p className="flex items-center gap-2">
-                  {" "}
-                  <BiInfoCircle /> Created at {"27 JUune 2024"}
-                </p>
                 <p className="flex items-center gap-2">
                   {" "}
                   <HiOutlineGlobeAlt /> English
@@ -301,6 +303,15 @@ function CourseDetails() {
                 {instructor?.additionalDetails?.about}
               </p>
             </div>
+
+            {/* Rating and Reviews Section */}
+                              <div className="mb-12 py-4">
+                    <CourseRatingReview 
+                      courseId={courseId} 
+                      courseName={courseName}
+                      showWriteReview={false}
+                    />
+                  </div>
           </div>
         </div>
       </div>

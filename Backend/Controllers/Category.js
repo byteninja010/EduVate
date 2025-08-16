@@ -74,11 +74,30 @@ exports.coursesByCategory=async(req,res)=>{
                 msg:"Missing category name"
             })
         }
-        const course=await categoryModel.find({name:catalogName}).populate("course");
+        const course=await categoryModel.find({name:catalogName}).populate({
+            path: "course",
+            populate: {
+                path: "ratingAndReviews",
+                select: "rating"
+            }
+        });
+
+        // Calculate average rating for each course
+        const coursesWithRating = course[0].course.map(courseItem => {
+            const courseObj = courseItem.toObject();
+            if (courseObj.ratingAndReviews && courseObj.ratingAndReviews.length > 0) {
+                const totalRating = courseObj.ratingAndReviews.reduce((sum, review) => sum + review.rating, 0);
+                courseObj.averageRating = Math.round((totalRating / courseObj.ratingAndReviews.length) * 10) / 10;
+            } else {
+                courseObj.averageRating = 0;
+            }
+            return courseObj;
+        });
+
         return res.status(200).json({
             success:true,
             msg:"Course of the following category has been succesfully fetched",
-            data:course[0].course
+            data:coursesWithRating
         })
     } catch (error) {
         return res.status(500).json({

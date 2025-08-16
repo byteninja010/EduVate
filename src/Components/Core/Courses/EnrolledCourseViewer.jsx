@@ -6,6 +6,7 @@ import { BiTime } from "react-icons/bi";
 import { MdOutlineDescription } from "react-icons/md";
 import { markVideoCompleted, getCourseProgress } from "../../../services/operations/courseProgressAPI";
 import toast from "react-hot-toast";
+import CourseRatingReview from "./CourseRatingReview";
 
 const EnrolledCourseViewer = ({ course }) => {
   const { token } = useSelector((state) => state.auth);
@@ -411,6 +412,23 @@ const EnrolledCourseViewer = ({ course }) => {
               </div>
             )}
           </div>
+        </div>
+
+        {/* Rating and Reviews Section - Below the main content */}
+        <div className="mt-8">
+          <div className="bg-richblack-800 rounded-lg border border-richblack-700 p-6 mb-4">
+            <h3 className="text-xl font-semibold text-richblack-5 mb-2">
+              Rate and Review This Course
+            </h3>
+            <p className="text-richblack-300 text-sm">
+              Share your experience and help other students make informed decisions
+            </p>
+          </div>
+          <CourseRatingReview 
+            courseId={course._id} 
+            courseName={course.courseName}
+            showWriteReview={true}
+          />
         </div>
       </div>
     </div>

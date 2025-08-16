@@ -15,6 +15,18 @@ const ProfileInformationEdit = () => {
         handleSubmit,
         formState: { errors },
       } = useForm();
+
+    // Safety check - ensure user data is loaded
+    if (!user) {
+        return (
+            <div className="flex items-center justify-center py-8">
+                <div className="spinner"></div>
+            </div>
+        );
+    }
+
+    // Ensure additionalDetails exists
+    const additionalDetails = user.additionalDetails || {};
       const submitProfileForm = async (data) => {
         // console.log("Form Data - ", data)
         try {
@@ -92,7 +104,7 @@ const ProfileInformationEdit = () => {
                         message: "Date of Birth cannot be in the future.",
                       },
                     })}
-                    defaultValue={user?.additionalDetails?.dob.split("T")[0]}
+                    defaultValue={additionalDetails.dob ? additionalDetails.dob.split("T")[0] : ""}
                   />
                   {errors.dateOfBirth && (
                     <span className="-mt-1 text-[12px] text-yellow-100">
@@ -110,7 +122,7 @@ const ProfileInformationEdit = () => {
                     id="gender"
                     className="form-style"
                     {...register("gender", { required: true })}
-                    defaultValue={user?.additionalDetails?.gender}
+                    defaultValue={additionalDetails.gender || ""}
                   >
                     {genders.map((ele, i) => {
                       return (
@@ -147,7 +159,7 @@ const ProfileInformationEdit = () => {
                       maxLength: { value: 12, message: "Invalid Contact Number" },
                       minLength: { value: 10, message: "Invalid Contact Number" },
                     })}
-                    defaultValue={user?.additionalDetails?.contactNumber}
+                    defaultValue={additionalDetails.contactNumber || ""}
                   />
                   {errors.contactNumber && (
                     <span className="-mt-1 text-[12px] text-yellow-100">
@@ -166,7 +178,7 @@ const ProfileInformationEdit = () => {
                     placeholder="Enter Bio Details"
                     className="form-style"
                     {...register("about", { required: true })}
-                    defaultValue={user?.additionalDetails?.about}
+                    defaultValue={additionalDetails.about || ""}
                   />
                   {errors.about && (
                     <span className="-mt-1 text-[12px] text-yellow-100">

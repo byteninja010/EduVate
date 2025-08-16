@@ -47,4 +47,13 @@ export const walletEndpoints = {
     ADD_MONEY: BASE_URL + "/wallet/addMoney",
     GET_INSTRUCTOR_REVENUE: BASE_URL + "/wallet/getInstructorRevenue"
 }
+
+export const ratingEndpoints = {
+    CREATE_RATING: BASE_URL + "/rating/createRating",
+    GET_AVERAGE_RATING: BASE_URL + "/rating/getAverageRating",
+    GET_COURSE_RATINGS: BASE_URL + "/rating/getCourseRatings",
+    UPDATE_RATING: BASE_URL + "/rating/updateRating",
+    DELETE_RATING: BASE_URL + "/rating/deleteRating",
+    GET_ALL_RATINGS: BASE_URL + "/rating/getAllRatings"
+}
   

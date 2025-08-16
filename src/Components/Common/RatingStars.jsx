@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react"
-import {
-  TiStarFullOutline,
-  TiStarHalfOutline,
-  TiStarOutline,
-} from "react-icons/ti"
+import { VscStarEmpty, VscStarFull, VscStarHalf } from "react-icons/vsc"
 
 function RatingStars({ Review_Count, Star_Size }) {
   const [starCount, SetStarCount] = useState({
@@ -14,22 +10,25 @@ function RatingStars({ Review_Count, Star_Size }) {
 
   useEffect(() => {
     const wholeStars = Math.floor(Review_Count) || 0
+    const hasHalfStar = Review_Count % 1 >= 0.5
+    
     SetStarCount({
       full: wholeStars,
-      half: Number.isInteger(Review_Count) ? 0 : 1,
-      empty: Number.isInteger(Review_Count) ? 5 - wholeStars : 4 - wholeStars,
+      half: hasHalfStar ? 1 : 0,
+      empty: hasHalfStar ? 4 - wholeStars : 5 - wholeStars,
     })
   }, [Review_Count])
+
   return (
-    <div className="flex gap-1 text-yellow-100">
+    <div className="flex gap-1 text-yellow-25">
       {[...new Array(starCount.full)].map((_, i) => {
-        return <TiStarFullOutline key={i} size={Star_Size || 20} />
+        return <VscStarFull key={`full-${i}`} size={Star_Size || 20} />
       })}
       {[...new Array(starCount.half)].map((_, i) => {
-        return <TiStarHalfOutline key={i} size={Star_Size || 20} />
+        return <VscStarHalf key={`half-${i}`} size={Star_Size || 20} className="text-yellow-25/60" />
       })}
       {[...new Array(starCount.empty)].map((_, i) => {
-        return <TiStarOutline key={i} size={Star_Size || 20} />
+        return <VscStarEmpty key={`empty-${i}`} size={Star_Size || 20} className="text-richblack-400" />
       })}
     </div>
   )
