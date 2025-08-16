@@ -21,6 +21,16 @@ html,body{
 .form-style {
    @apply rounded-lg bg-richblack-700 p-3 text-[16px] leading-[24px] text-richblack-5 shadow-[0_1px_0_0] shadow-white/50 placeholder:text-richblack-400 focus:outline-none;
  }
+
+/* Button Styles */
+.yellowButton {
+    @apply bg-yellow-25 text-richblack-900 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-50 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl;
+}
+
+.blackButton {
+    @apply bg-richblack-800 text-richblack-100 px-6 py-3 rounded-lg font-semibold hover:bg-richblack-700 transition-all duration-200 transform hover:scale-105 active:scale-95 border border-richblack-600 hover:border-richblack-500 shadow-lg hover:shadow-xl;
+}
+
 @keyframes spinner-bulqg1 {
    0% {
       clip-path: polygon(50% 50%, 0 0, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%);

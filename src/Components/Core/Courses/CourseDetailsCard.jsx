@@ -45,6 +45,21 @@ function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
       return
     }
 
+    // Show purchase confirmation modal
+    setConfirmationModal({
+      txt1: "Confirm Purchase",
+      txt2: `Are you sure you want to purchase "${course.courseName}" for ₹${CurrentPrice}? This will be deducted from your wallet.`,
+      btn1Txt: "Confirm Purchase",
+      btn2Txt: "Cancel",
+      btn1onClick: async () => {
+        setConfirmationModal(null);
+        await performPurchase();
+      },
+      btn2onClick: () => setConfirmationModal(null),
+    });
+  };
+
+  const performPurchase = async () => {
     setPurchasing(true)
     try {
       const response = await purchaseCourse(courseId, token)
@@ -66,7 +81,18 @@ function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
       return
     }
     if (token) {
-      dispatch(addItem(course))
+      // Show add to cart confirmation modal
+      setConfirmationModal({
+        txt1: "Add to Cart",
+        txt2: `Add "${course.courseName}" to your cart for ₹${CurrentPrice}?`,
+        btn1Txt: "Add to Cart",
+        btn2Txt: "Cancel",
+        btn1onClick: () => {
+          dispatch(addItem(course));
+          setConfirmationModal(null);
+        },
+        btn2onClick: () => setConfirmationModal(null),
+      });
       return
     }
     setConfirmationModal({
@@ -78,6 +104,11 @@ function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
       btn2onClick: () => setConfirmationModal(null),
     })
   }
+
+  // Check if course is already in cart
+  const isInCart = useSelector((state) => 
+    state.cart.items.some(item => item._id === courseId)
+  )
 
   // console.log("Student already enrolled ", course?.studentsEnroled, user?._id)
 
@@ -112,8 +143,12 @@ function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
                 : purchasing ? "Purchasing..." : "Buy with Wallet"}
             </button>
             {(!user || !course?.studentsEnrolled.includes(user?._id)) && (
-              <button onClick={handleAddToCart} className="blackButton">
-                Add to Cart
+              <button 
+                onClick={handleAddToCart} 
+                className={`${isInCart ? 'bg-green-600 hover:bg-green-700 text-white' : 'blackButton'} transition-all duration-200`}
+                disabled={isInCart}
+              >
+                {isInCart ? "✓ Added to Cart" : "Add to Cart"}
               </button>
             )}
           </div>

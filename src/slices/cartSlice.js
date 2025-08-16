@@ -1,4 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import toast from "react-hot-toast";
+
 // Load cart items from localStorage
 const loadCartFromLocalStorage = () => {
     try {
@@ -26,21 +28,36 @@ const cartSlice = createSlice({
     },
     reducers: {
         addItem: (state, action) => {
-            state.items.push(action.payload);
-            saveCartToLocalStorage(state.items);
-          
+            const courseId = action.payload._id;
+            const existingItem = state.items.find(item => item._id === courseId);
+            
+            if (!existingItem) {
+                state.items.push(action.payload);
+                saveCartToLocalStorage(state.items);
+                toast.success("Course added to cart!");
+            } else {
+                toast.error("Course already in cart!");
+            }
         },
-        removeItem: (state) => {
-            state.items.pop(); // Assuming removing the last item as an example
-            saveCartToLocalStorage(state.items); 
-       
+        removeItem: (state, action) => {
+            const courseId = action.payload;
+            state.items = state.items.filter(item => item._id !== courseId);
+            saveCartToLocalStorage(state.items);
         },
         clearCart: (state) => {
-            state.items.length = 0;
+            state.items = [];
             localStorage.removeItem("cartItems");
+        },
+        updateQuantity: (state, action) => {
+            const { courseId, quantity } = action.payload;
+            const item = state.items.find(item => item._id === courseId);
+            if (item) {
+                item.quantity = quantity;
+                saveCartToLocalStorage(state.items);
+            }
         },
     },
 });
 
 export default cartSlice.reducer;
-export const { addItem, removeItem, clearCart } = cartSlice.actions;
+export const { addItem, removeItem, clearCart, updateQuantity } = cartSlice.actions;

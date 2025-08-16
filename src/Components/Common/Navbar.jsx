@@ -13,18 +13,36 @@ import { FaShoppingCart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../services/operations/authAPI";
 import { useDispatch } from "react-redux";
+import { ACCOUNT_TYPE } from "../../utils/constants";
+
 const Navbar = () => {
   const navigate=useNavigate();
   const dispatch=useDispatch();
   const location = useLocation();
   const [subLinks, setSubLinks] = useState([]);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
   const token = useSelector((store) => store.auth.token);
   const user = useSelector((store) => store.profile.user);
  // console.log(user);
   const cart = useSelector((store) => store.cart.items);
+  
   const handleLogOut=()=>{
       dispatch(logout(navigate));
   }
+
+  const handleDashboardClick = () => {
+    if (user?.accountType === ACCOUNT_TYPE.INSTRUCTOR) {
+      navigate('/dashboard/instructor');
+    } else {
+      navigate('/dashboard/student');
+    }
+    setShowProfileMenu(false);
+  }
+
+  const toggleProfileMenu = () => {
+    setShowProfileMenu(!showProfileMenu);
+  }
+
   const fetchData = async () => {
     try {
       const result = await apiConnector("GET", categories.CATEGORIES_API);
@@ -37,6 +55,21 @@ const Navbar = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  // Close profile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showProfileMenu && !event.target.closest('.profile-menu')) {
+        setShowProfileMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showProfileMenu]);
+
   console.log(subLinks);
   const matchRoute = (route) => {
     return matchPath({ path: route }, location.pathname);
@@ -74,7 +107,7 @@ const Navbar = () => {
                           <TiArrowSortedDown />
                         </p>
                       </Link>
-                      <div className="absolute bg-richblack-50 rounded-md px-4 invisible group-hover:visible opacity:0 group-hover:opacity-100">
+                      <div className="absolute bg-richblack-50 rounded-md px-4 invisible group-hover:visible opacity-0 group-hover:opacity-100">
                         {subLinks.map((cat,key) => {
                            return <Link to={`/catalog/${cat.name}`} key={key}><p className="text-richblack-700 my-2 hover:scale-95 transition-all duration-200">{cat.name}</p></Link>;
                         })}
@@ -105,12 +138,61 @@ const Navbar = () => {
                 <FaShoppingCart className="text-2xl relative"/>
                 <p className="absolute text-pink-500 top-[-7px] left-4 font-bold">{cart.length}</p>
               </Link> 
-                <button className="bg-richblack-800 text-richblack-100 px-6 py-2 rounded-md hover:scale-95 transition-all duration-200 cursor-pointer" onClick={handleLogOut}>
-                  Log Out
+              
+              {/* Profile Dropdown Menu */}
+              <div className="relative profile-menu">
+                <button 
+                  onClick={toggleProfileMenu}
+                  className="flex items-center gap-2 hover:scale-105 transition-all duration-200 cursor-pointer"
+                >
+                  <img 
+                    src={user.image} 
+                    width={"50px"} 
+                    height={"50px"} 
+                    className="rounded-full object-cover border-2 border-richblack-600 hover:border-yellow-25 transition-colors duration-200" 
+                    alt="Profile"
+                  />
+                  <TiArrowSortedDown className={`text-sm transition-transform duration-200 ${showProfileMenu ? 'rotate-180' : ''}`} />
                 </button>
-                <div>
-                <img src={user.image} width={"50px"} height={"50px"} className="rounded-full object-cover" />
-                </div>
+                
+                {/* Dropdown Menu */}
+                {showProfileMenu && (
+                  <div className="absolute right-0 mt-2 w-48 bg-richblack-800 rounded-lg shadow-lg border border-richblack-600 py-2 z-50">
+                    <button
+                      onClick={handleDashboardClick}
+                      className="w-full text-left px-4 py-3 text-richblack-100 hover:bg-richblack-700 hover:text-yellow-25 transition-all duration-200 flex items-center gap-3"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                      </svg>
+                      Dashboard
+                    </button>
+                    
+                    <button
+                      onClick={() => {
+                        navigate('/cart');
+                        setShowProfileMenu(false);
+                      }}
+                      className="w-full text-left px-4 py-3 text-richblack-100 hover:bg-richblack-700 hover:text-blue-400 transition-all duration-200 flex items-center gap-3"
+                    >
+                      <FaShoppingCart className="w-5 h-5" />
+                      View Cart ({cart.length})
+                    </button>
+                    
+                    <div className="border-t border-richblack-600 my-1"></div>
+                    
+                    <button
+                      onClick={handleLogOut}
+                      className="w-full text-left px-4 py-3 text-richblack-100 hover:bg-richblack-700 hover:text-pink-400 transition-all duration-200 flex items-center gap-3"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                      </svg>
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           ) : (
             <div className="hidden md:flex flex-row gap-4 items-center">

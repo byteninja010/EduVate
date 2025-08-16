@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { BiInfoCircle } from "react-icons/bi"
 import { HiOutlineGlobeAlt } from "react-icons/hi"
 import  Markdown from "react-markdown"
-import {useSelector } from "react-redux"
+import {useSelector, useDispatch } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
 import ConfirmationModal from "../Components/Common/ConfirmationModal"
 import Footer from "../Components/Common/Footer"
@@ -10,16 +10,18 @@ import RatingStars from "../Components/Common/RatingStars"
 import CourseAccordionBar from "../Components/Core/Courses/CourseAccordionBar"
 import CourseDetailsCard from "../Components/Core/Courses/CourseDetailsCard"
 import { fetchCourseDetails } from "../services/operations/courseDetailsApi"
+import { addItem } from "../slices/cartSlice"
 //import { buyCourse } from "../services/operations/studentFeaturesAPI"
 import GetAvgRating from "../utils/getAverageRating"
 import Error from "./Error"
+import toast from "react-hot-toast"
 
 function CourseDetails() {
   // const { user } = useSelector((state) => state.profile)
   const { token } = useSelector((state) => state.auth)
   const { loading } = useSelector((state) => state.profile)
   const { paymentLoading } = useSelector((state) => state.course)
-  // const dispatch = useDispatch()
+  const dispatch = useDispatch()
   const navigate = useNavigate()
 
   // Getting courseId from url parameter
@@ -98,16 +100,38 @@ function CourseDetails() {
 
   const handleBuyCourse = () => {
     if (token) {
-     // buyCourse(token, [courseId], user, navigate, dispatch)
+      // Show purchase confirmation modal
+      setConfirmationModal({
+        txt1: "Confirm Purchase",
+        txt2: `Are you sure you want to purchase "${courseName}" for ₹${price}? This will be deducted from your wallet.`,
+        btn1Txt: "Confirm Purchase",
+        btn2Txt: "Cancel",
+        btn1onClick: async () => {
+          setConfirmationModal(null);
+          // Import and use wallet purchase
+          const { purchaseCourse } = require("../services/operations/walletAPI");
+          try {
+            const response = await purchaseCourse(courseId, token);
+            if (response.success) {
+              toast.success("Course purchased successfully!");
+              navigate('/dashboard/student');
+            }
+          } catch (error) {
+            console.error('Failed to purchase course:', error);
+            toast.error('Failed to purchase course. Please try again.');
+          }
+        },
+        btn2onClick: () => setConfirmationModal(null),
+      });
       return
     }
     setConfirmationModal({
-      text1: "You are not logged in!",
-      text2: "Please login to Purchase Course.",
-      btn1Text: "Login",
-      btn2Text: "Cancel",
-      btn1Handler: () => navigate("/login"),
-      btn2Handler: () => setConfirmationModal(null),
+      txt1: "You are not logged in!",
+      txt2: "Please login to Purchase Course.",
+      btn1Txt: "Login",
+      btn2Txt: "Cancel",
+      btn1onClick: () => navigate("/login"),
+      btn2onClick: () => setConfirmationModal(null),
     })
   }
 
@@ -172,7 +196,33 @@ function CourseDetails() {
               <button className="yellowButton" onClick={handleBuyCourse}>
                 Buy Now
               </button>
-              <button className="blackButton">Add to Cart</button>
+              <button className="blackButton" onClick={() => {
+                if (token) {
+                  // Show add to cart confirmation modal
+                  setConfirmationModal({
+                    txt1: "Add to Cart",
+                    txt2: `Add "${courseName}" to your cart for ₹${price}?`,
+                    btn1Txt: "Add to Cart",
+                    btn2Txt: "Cancel",
+                    btn1onClick: () => {
+                      dispatch(addItem(response?.data?.courseDetails));
+                      setConfirmationModal(null);
+                    },
+                    btn2onClick: () => setConfirmationModal(null),
+                  });
+                } else {
+                  setConfirmationModal({
+                    txt1: "You are not logged in!",
+                    txt2: "Please login to add To Cart",
+                    btn1Txt: "Login",
+                    btn2Txt: "Cancel",
+                    btn1onClick: () => navigate("/login"),
+                    btn2onClick: () => setConfirmationModal(null),
+                  });
+                }
+              }}>
+                Add to Cart
+              </button>
             </div>
           </div>
           {/* Courses Card */}

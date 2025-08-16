@@ -79,7 +79,7 @@ export const login=(email,password,navigate)=>{
             localStorage.setItem("token",JSON.stringify(response.data.token));
             dispatch(setUser(response.data.user));
             localStorage.setItem("user",JSON.stringify(response.data.user));
-            navigate("/dashboard/myProfile");
+            navigate("/dashboard");
         }catch(err){
             console.log("Login Api Errrrrror----------",err);
             toast.dismiss(toastId);

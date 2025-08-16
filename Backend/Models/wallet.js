@@ -34,7 +34,7 @@ const walletSchema = new mongoose.Schema({
   },
   balance: {
     type: Number,
-    default: 10000, // Initial balance of ₹10,000
+    default: 500, // Initial balance of ₹500
     min: 0
   },
   transactions: [transactionSchema],

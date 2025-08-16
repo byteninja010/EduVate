@@ -4,14 +4,30 @@ import { Link } from 'react-router-dom'
 const CardComponent = ({course}) => {
   return (
     <Link to={`/course/${course._id}`}>  
-    <div className='w-[28%] mt-5 p-3 hover:scale-95 transition-all duration-200'>
-    <div><img src={course.thumbnail} alt="" className='object-cover rounded-2xl'/></div>
-    <div className='flex flex-col mt-4'>
-      <p className='text-xl text-richblack-5'>{course.courseName}</p>
-      <p className='text-richblack-100'>{course.courseDescription}</p>
-      <p className='text-yellow-100 text-lg'>₹{course.price}</p>
-    </div>
-    </div>
+      <div className='w-full bg-richblack-800 rounded-xl p-4 hover:scale-105 transition-all duration-300 hover:shadow-2xl hover:shadow-yellow-25/20 border border-richblack-700 hover:border-yellow-25/50 group'>
+        <div className='relative overflow-hidden rounded-lg'>
+          <img 
+            src={course.thumbnail} 
+            alt={course.courseName} 
+            className='w-full h-48 object-cover rounded-lg group-hover:scale-110 transition-transform duration-300'
+          />
+          <div className='absolute inset-0 bg-gradient-to-t from-richblack-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
+        </div>
+        <div className='mt-4 space-y-2'>
+          <h3 className='text-lg font-semibold text-richblack-5 line-clamp-2 group-hover:text-yellow-25 transition-colors duration-200'>
+            {course.courseName}
+          </h3>
+          <p className='text-richblack-300 text-sm line-clamp-2'>
+            {course.courseDescription}
+          </p>
+          <div className='flex items-center justify-between pt-2'>
+            <p className='text-yellow-25 text-xl font-bold'>₹{course.price}</p>
+            <div className='text-richblack-400 text-sm'>
+              {course.courseContent?.length || 0} sections
+            </div>
+          </div>
+        </div>
+      </div>
     </Link>
   )
 }

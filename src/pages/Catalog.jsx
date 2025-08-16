@@ -30,12 +30,11 @@ const Catalog = () => {
   }, [catalogName]); 
   
   return (
-    <div>
+    <div className="min-h-screen bg-richblack-900">
       {loading ? (
         <div className="flex items-center justify-center h-[90vh]">
-             <div className="spinner"></div>
+          <div className="spinner"></div>
         </div>
-       
       ) : (
         <div className="mx-auto">
           <div className="p-10 flex flex-col gap-y-4 bg-richblack-800">
@@ -53,10 +52,20 @@ const Catalog = () => {
             </div>
           </div>
           <div className="text-white w-11/12 mx-auto">
-            <h1 className="text-white text-3xl mt-6">Most Popular {catalogName} Courses</h1>
-            {courses.map((course,key)=>(
-                <CardComponent course={course}/>
-            ))}
+            <h1 className="text-white text-3xl mt-6 mb-8">Most Popular {catalogName} Courses</h1>
+            {courses.length === 0 ? (
+              <div className="text-center py-16">
+                <div className="text-6xl mb-4">📚</div>
+                <h2 className="text-2xl font-semibold text-richblack-300 mb-2">No courses found</h2>
+                <p className="text-richblack-400">There are currently no courses available in this category.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {courses.map((course, key) => (
+                  <CardComponent key={course._id} course={course} />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}

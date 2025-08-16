@@ -14,15 +14,16 @@
   import Settings from "./Components/Core/Dashboard/Settings";
   import EnrolledCourse from "./Components/Core/Dashboard/EnrolledCourse";
   import InstructorDashboard from "./Components/Core/Dashboard/InstructorDashboard";
+  import StudentDashboard from "./Components/Core/Dashboard/StudentDashboard";
   import MyCourses from "./Components/Core/Dashboard/MyCourses";
   import AddCourse from "./Components/Core/Dashboard/AddCourse";
   import EditCourse from "./Components/Core/Dashboard/EditCourse";
   import ManageCourse from "./Components/Core/Dashboard/ManageCourse";
   import Wallet from "./Components/Core/Dashboard/Wallet";
-  import PurchaseHistory from "./Components/Core/Dashboard/PurchaseHistory";
 import EnrolledCourseView from "./pages/EnrolledCourseView";
 import Catalog from "./pages/Catalog";
 import CourseDetails from "./pages/CourseDetails";
+import Cart from "./pages/Cart";
   function App() {
     return (
       <Provider store={appStore}>
@@ -40,16 +41,17 @@ import CourseDetails from "./pages/CourseDetails";
             <Route path="settings" element={<Settings />} />
             <Route path="enrolled-courses" element={<EnrolledCourse/>}/>
             <Route path="instructor" element={<InstructorDashboard />} />
+            <Route path="student" element={<StudentDashboard />} />
             <Route path="my-courses" element={<MyCourses />} />
             <Route path="add-course" element={<AddCourse />} />
             <Route path="edit-course/:courseId" element={<EditCourse />} />
             <Route path="manage-course/:courseId" element={<ManageCourse />} />
             <Route path="wallet" element={<Wallet />} />
-            <Route path="purchase-history" element={<PurchaseHistory />} />
         </Route>
         <Route path="/catalog/:catalogName" element={<Catalog/>}></Route>
         <Route path="/course/:courseId" element={<CourseDetails/>}></Route>
         <Route path="/enrolled-course/:courseId" element={<EnrolledCourseView/>}></Route>
+        <Route path="/cart" element={<Cart/>}></Route>
       </Routes>
       {/* <Footer/> */}
     </div>

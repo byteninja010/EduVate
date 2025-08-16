@@ -13,7 +13,7 @@ exports.getWallet = async (req, res) => {
       // Create wallet if it doesn't exist
       wallet = await walletModel.create({
         userId,
-        balance: 10000,
+        balance: 500,
         transactions: []
       });
     }
@@ -68,7 +68,7 @@ exports.purchaseCourse = async (req, res) => {
     if (!wallet) {
       wallet = await walletModel.create({
         userId,
-        balance: 10000,
+        balance: 500,
         transactions: []
       });
     }
@@ -141,7 +141,7 @@ exports.addMoney = async (req, res) => {
     if (!wallet) {
       wallet = await walletModel.create({
         userId,
-        balance: 10000,
+        balance: 500,
         transactions: []
       });
     }
