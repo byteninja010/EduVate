@@ -43,6 +43,16 @@ const Home = () => {
             Book A Demo
           </YBbutton>
         </div>
+        
+        {/* Browse Catalog Button */}
+        <div className="mt-8">
+          <Link to="/catalog">
+            <button className="bg-yellow-25 text-richblack-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-50 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl flex items-center gap-3 mx-auto">
+              <span>Browse Course Catalog</span>
+              <FaArrowRight />
+            </button>
+          </Link>
+        </div>
 
         <div className="shadow-[10px_-5px_50px_-5px] shadow-blue-200 mt-16">
           <video

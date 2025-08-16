@@ -48,7 +48,8 @@ import Cart from "./pages/Cart";
             <Route path="manage-course/:courseId" element={<ManageCourse />} />
             <Route path="wallet" element={<Wallet />} />
         </Route>
-        <Route path="/catalog/:catalogName" element={<Catalog/>}></Route>
+                          <Route path="/catalog" element={<Catalog/>}></Route>
+                  <Route path="/catalog/:catalogName" element={<Catalog/>}></Route>
         <Route path="/course/:courseId" element={<CourseDetails/>}></Route>
         <Route path="/enrolled-course/:courseId" element={<EnrolledCourseView/>}></Route>
         <Route path="/cart" element={<Cart/>}></Route>

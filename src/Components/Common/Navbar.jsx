@@ -94,7 +94,7 @@ const Navbar = () => {
               return (
                 <li key={index}>
                   {link.title === "Catalog" ? (
-                    <div className="realtive group transition-all duration-200">
+                    <div className="relative group transition-all duration-200">
                       <Link to={link?.path}>
                         <p
                           className={`${
@@ -107,11 +107,11 @@ const Navbar = () => {
                           <TiArrowSortedDown />
                         </p>
                       </Link>
-                      <div className="absolute bg-richblack-50 rounded-md px-4 invisible group-hover:visible opacity-0 group-hover:opacity-100">
-                        {subLinks.map((cat,key) => {
-                           return <Link to={`/catalog/${cat.name}`} key={key}><p className="text-richblack-700 my-2 hover:scale-95 transition-all duration-200">{cat.name}</p></Link>;
-                        })}
-                      </div>
+                                             <div className="absolute top-full left-0 bg-richblack-900 rounded-xl px-4 py-3 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-200 z-50 border border-yellow-25/20 shadow-2xl shadow-yellow-25/10 min-w-[220px] backdrop-blur-sm">
+                         {subLinks.map((cat,key) => {
+                            return <Link to={`/catalog/${cat.name}`} key={key}><p className="text-richblack-100 my-2 hover:text-yellow-25 hover:scale-105 transition-all duration-200 px-3 py-2 rounded-lg hover:bg-yellow-25/10 hover:bg-gradient-to-r hover:from-yellow-25/5 hover:to-transparent">{cat.name}</p></Link>;
+                         })}
+                       </div>
                     </div>
                   ) : (
                     <Link to={link?.path}>
