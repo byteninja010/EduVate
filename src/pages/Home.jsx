@@ -20,23 +20,23 @@ const Home = () => {
             className="mt-16 p-1 mx-auto rounded-full bg-richblack-800 font-bold text-richblack-200 transition-all duration-200 
            hover:scale-95 w-fit group"
           >
-            <div className="flex flex-row items-center rounded-full px-10 py-[5px] transition-all duration-200 group-hover:bg-richblack-900">
-              <p>Become an instructor</p>
-              <FaArrowRight />
+            <div className="flex flex-row items-center rounded-full px-6 md:px-10 py-[5px] transition-all duration-200 group-hover:bg-richblack-900">
+              <p className="text-sm md:text-base">Become an instructor</p>
+              <FaArrowRight className="text-sm md:text-base" />
             </div>
           </div>
         </Link>
-        <div className="text-center text-4xl font-semibold mt-7">
+        <div className="text-center text-2xl md:text-4xl font-semibold mt-7 px-4">
           Empower Your Future with <HighlightedText text={"Coding Skills"} />
         </div>
-        <div className="w-7/12 text-center text-richblack-300 mt-3 font-inter font-medium">
+        <div className="w-full md:w-7/12 text-center text-richblack-300 mt-3 font-inter font-medium px-4 text-sm md:text-base">
           With our online coding courses, you can learn at your own pace, from
           anywhere in the world, and get access to a wealth of resources,
           including hands-on projects, quizzes, and personalized feedback from
           instructors.
         </div>
-        <div className="flex flex-row gap-7 mt-7 font-medium">
-          <YBbutton active={true} linkTo={"/signup"}>
+        <div className="flex flex-col md:flex-row gap-4 md:gap-7 mt-7 font-medium px-4">
+          <YBbutton active={true} linkTo={"/catalog"}>
             Learn More
           </YBbutton>
           <YBbutton active={false} linkTo={"/bookADemo"}>
@@ -45,9 +45,9 @@ const Home = () => {
         </div>
         
         {/* Browse Catalog Button */}
-        <div className="mt-8">
+        <div className="mt-8 px-4">
           <Link to="/catalog">
-            <button className="bg-yellow-25 text-richblack-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-50 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl flex items-center gap-3 mx-auto">
+            <button className="bg-yellow-25 text-richblack-900 px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold hover:bg-yellow-50 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl flex items-center gap-3 mx-auto text-sm md:text-base">
               <span>Browse Course Catalog</span>
               <FaArrowRight />
             </button>
@@ -81,12 +81,12 @@ const Home = () => {
                   Try it yourself <FaArrowRight />
                 </div>
               ),
-              linkTo: "/signup",
+              linkTo: "/catalog",
               active: true,
             }}
             btn2={{
               btnText: "Learn More",
-              linkTo: "/signup",
+              linkTo: "/catalog",
               active: false,
             }}
             codeColor={"text-yellow-100"}
@@ -111,12 +111,12 @@ const Home = () => {
                   Continue Lesson <FaArrowRight />
                 </div>
               ),
-              linkTo: "/signup",
+              linkTo: "/catalog",
               active: true,
             }}
             btn2={{
               btnText: "Learn More",
-              linkTo: "/signup",
+              linkTo: "/catalog",
               active: false,
             }}
             codeColor={"text-richblack-200"}
@@ -129,12 +129,12 @@ const Home = () => {
       <div className="bg-pure-greys-5 text-richblack-700">
         <div className="flex homepage_bg h-[300px]">
           <div className="flex flex-row w-11/12 mx-auto items-center justify-center mt-10 gap-4">
-            <YBbutton linkTo={"/signup"} active={true}>
+            <YBbutton linkTo={"/catalog"} active={true}>
               <div className="flex flex-row gap-2 items-center">
                 Explore Full Catalog <FaArrowRight />
               </div>
             </YBbutton>
-            <YBbutton linkTo={"/signup"} active={false}>
+            <YBbutton linkTo={"/catalog"} active={false}>
               Learn More
             </YBbutton>
           </div>
@@ -151,7 +151,7 @@ const Home = () => {
                 be a competitive specialist requires more than professional
                 skills.
               </p>
-              <YBbutton link={"/signup"} active={true}>
+              <YBbutton linkTo={"/catalog"} active={true}>
                 Learn More
               </YBbutton>
             </div>

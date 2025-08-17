@@ -4,7 +4,7 @@ import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from '../Components/Core/Dashboard/Sidebar';
 import { ACCOUNT_TYPE } from '../utils/constants';
 
-const Dashboard = () => {
+const Dashboard = ({ isMobileMenuOpen, closeMobileMenu }) => {
     const loading = useSelector((state) => state.auth.loading);
     const { user } = useSelector((state) => state.profile);
     const navigate = useNavigate();
@@ -29,9 +29,9 @@ const Dashboard = () => {
     
     return (
     <div className='relative flex min-h-[calc(100vh-3.5rem)]'>
-        <Sidebar/>
-        <div className="h-[calc(100vh-3.5rem)] flex-1 overflow-auto">
-        <div className="mx-auto w-11/12 max-w-[1000px] py-10">
+        <Sidebar isMobileMenuOpen={isMobileMenuOpen} closeMobileMenu={closeMobileMenu} />
+        <div className="h-[calc(100vh-3.5rem)] flex-1 overflow-auto w-full">
+        <div className="mx-auto w-11/12 max-w-[1000px] py-6 lg:py-10 px-4 lg:px-0 mt-0 lg:mt-0">
           <Outlet />
         </div>
       </div>

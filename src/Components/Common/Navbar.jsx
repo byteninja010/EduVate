@@ -7,19 +7,19 @@ import { matchPath } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { useState, useEffect } from "react";
-import { apiConnector } from "../../services/apiconnector";
-import { categories } from "../../services/apis";
+// Removed unused imports
 import { FaShoppingCart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../services/operations/authAPI";
 import { ACCOUNT_TYPE } from "../../utils/constants";
 // Removed setCategories import since it's no longer used
 
-const Navbar = () => {
+const Navbar = ({ onToggleSidebar, isSidebarOpen }) => {
     const navigate=useNavigate();
   const dispatch=useDispatch();
   const location = useLocation();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const token = useSelector((store) => store.auth.token);
   const user = useSelector((store) => store.profile.user);
   const courseState = useSelector((store) => store.course);
@@ -41,11 +41,18 @@ const Navbar = () => {
       navigate('/dashboard/student');
     }
     setShowProfileMenu(false);
+    setShowMobileMenu(false);
   }
 
   const toggleProfileMenu = () => {
     setShowProfileMenu(!showProfileMenu);
   }
+
+  const toggleSidebar = () => {
+    if (onToggleSidebar) {
+      onToggleSidebar();
+    }
+  };
 
   // Remove duplicate category fetching - let Catalog.jsx handle it
   // const fetchData = async () => {
@@ -77,33 +84,57 @@ const Navbar = () => {
       if (showProfileMenu && !event.target.closest('.profile-menu')) {
         setShowProfileMenu(false);
       }
+      if (showMobileMenu && !event.target.closest('.mobile-menu-container')) {
+        setShowMobileMenu(false);
+      }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showProfileMenu]);
+  }, [showProfileMenu, showMobileMenu]);
 
   const matchRoute = (route) => {
     return matchPath({ path: route }, location.pathname);
   };
+
   return (
-    <div className="flex h-14 items-center justify-center border-b-[1px] border-b-richblack-700 ">
-      <div className="w-11/12 py-3 px-28 flex flex-row justify-between items-center">
-        <div className="mx-auto md:mx-0">
-          <Link to="/">
-            <img
-              src={logo}
-              alt=""
-              width={"160px"}
-              height={"32px"}
-              loading="lazy"
-            />
-          </Link>
+    <div className="flex h-14 items-center justify-center border-b-[1px] border-b-richblack-700">
+      <div className="w-11/12 py-3 px-4 lg:px-28 flex flex-row justify-between items-center">
+        {/* Left side - Hamburger menu and logo */}
+        <div className="flex items-center gap-4">
+          {/* Hamburger Menu Button - Only show on mobile and when on dashboard */}
+          {location.pathname.startsWith('/dashboard') && (
+            <button 
+              className="lg:hidden text-richblack-25 hover:text-yellow-25 transition-colors duration-200 p-1"
+              onClick={toggleSidebar}
+              aria-label="Toggle sidebar"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          )}
+          
+          {/* Logo */}
+          <div className="mx-auto md:mx-0">
+            <Link to="/">
+              <img
+                src={logo}
+                alt=""
+                width={"160px"}
+                height={"32px"}
+                loading="lazy"
+                className="w-32 lg:w-40"
+              />
+            </Link>
+          </div>
         </div>
-        <nav>
-          <ul className="hidden lg:flex gap-x-6 text-richblack-25">
+        
+        {/* Center - Navigation */}
+        <nav className="hidden lg:block">
+          <ul className="flex gap-x-6 text-richblack-25">
             {NavbarLinks.map((link, index) => {
               return (
                 <li key={index}>
@@ -155,9 +186,121 @@ const Navbar = () => {
                 </li>
               );
             })}
-          </ul>
-        </nav>
-        <div>
+                      </ul>
+          </nav>
+
+        {/* Mobile Menu */}
+        {showMobileMenu && (
+          <div className="lg:hidden absolute top-14 left-0 right-0 bg-richblack-900 border-b border-richblack-700 z-50 mobile-menu-container">
+            <div className="px-4 py-4 space-y-4">
+              {NavbarLinks.map((link, index) => (
+                <div key={index}>
+                  {link.title === "Catalog" ? (
+                    <div className="space-y-2">
+                      <p className="text-richblack-300 text-sm font-medium uppercase tracking-wide">
+                        {link.title}
+                      </p>
+                      <div className="pl-4 space-y-2">
+                        {!courseState ? (
+                          <div className="text-center py-2">
+                            <div className="w-4 h-4 border-2 border-yellow-25 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                            <p className="text-richblack-300 text-sm">Loading...</p>
+                          </div>
+                        ) : !safeCategories || safeCategories.length === 0 ? (
+                          <p className="text-richblack-400 text-sm">No categories available</p>
+                        ) : (
+                          safeCategories.map((cat, key) => (
+                            <Link 
+                              key={key} 
+                              to={`/catalog/${cat.name}`}
+                              onClick={() => setShowMobileMenu(false)}
+                              className="block text-richblack-100 hover:text-yellow-25 transition-colors duration-200 py-1"
+                            >
+                              {cat.name}
+                            </Link>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  ) : (
+                    <Link 
+                      to={link?.path}
+                      onClick={() => setShowMobileMenu(false)}
+                      className="block text-richblack-100 hover:text-yellow-25 transition-colors duration-200 py-2"
+                    >
+                      {link.title}
+                    </Link>
+                  )}
+                </div>
+              ))}
+              
+              {/* Mobile Auth Buttons */}
+              {!token ? (
+                <div className="pt-4 border-t border-richblack-700 space-y-2">
+                  <Link to="/login" onClick={() => setShowMobileMenu(false)}>
+                    <button className="w-full bg-richblack-800 text-richblack-100 px-4 py-2 rounded-md hover:bg-richblack-700 transition-all duration-200">
+                      Log In
+                    </button>
+                  </Link>
+                  <Link to="/signup" onClick={() => setShowMobileMenu(false)}>
+                    <button className="w-full bg-yellow-25 text-richblack-900 px-4 py-2 rounded-md hover:bg-yellow-50 transition-all duration-200 font-semibold">
+                      Sign Up
+                    </button>
+                  </Link>
+                </div>
+              ) : (
+                <div className="pt-4 border-t border-richblack-700 space-y-2">
+                  {user?.accountType === 'Admin' && (
+                    <Link to="/admin" onClick={() => setShowMobileMenu(false)}>
+                      <button className="w-full bg-yellow-25/10 border border-yellow-25/20 rounded-lg px-4 py-2 text-yellow-25 font-semibold hover:bg-yellow-25/20 transition-all duration-200">
+                        Admin Panel
+                      </button>
+                    </Link>
+                  )}
+                  <Link to="/cart" onClick={() => setShowMobileMenu(false)}>
+                    <button className="w-full bg-richblack-800 text-richblack-100 px-4 py-2 rounded-md hover:bg-richblack-700 transition-all duration-200 flex items-center justify-center gap-2">
+                      <FaShoppingCart className="text-lg" />
+                      Cart ({cart.length})
+                    </button>
+                  </Link>
+                  <button 
+                    onClick={() => {
+                      handleDashboardClick();
+                      setShowMobileMenu(false);
+                    }}
+                    className="w-full bg-richblack-800 text-richblack-100 px-4 py-2 rounded-md hover:bg-richblack-700 transition-all duration-200"
+                  >
+                    Dashboard
+                  </button>
+                  <button 
+                    onClick={() => {
+                      handleLogOut();
+                      setShowMobileMenu(false);
+                    }}
+                    className="w-full bg-pink-600 text-white px-4 py-2 rounded-md hover:bg-pink-700 transition-all duration-200"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Right side - Profile and actions */}
+        <div className="flex items-center gap-4">
+          {/* Mobile Menu Button for non-dashboard pages */}
+          {!location.pathname.startsWith('/dashboard') && (
+            <button 
+              className="lg:hidden text-richblack-25 hover:text-yellow-25 transition-colors duration-200"
+              onClick={() => setShowMobileMenu(!showMobileMenu)}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          )}
+          
           {token ? (
             <div className="hidden md:flex flex-row gap-4 items-center text-richblack-25">
               {/* Admin Access Link */}
@@ -235,7 +378,7 @@ const Navbar = () => {
                 </button>
               </Link>
               <Link to={"/signup"}>
-                <button className="bg-richblack-800 text-richblack-100 px-6 py-2 rounded-md hover:scale-95 transition-all duration-200">
+                <button className="w-full bg-richblack-800 text-richblack-100 px-6 py-2 rounded-md hover:scale-95 transition-all duration-200">
                   Sign Up
                 </button>
               </Link>

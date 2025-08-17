@@ -1,5 +1,6 @@
   import "./App.css";
 import {Route,Routes} from "react-router-dom";
+import { useState } from "react";
 import Home from "./pages/Home";
 import Navbar from "./Components/Common/Navbar";
 import appStore from "./utils/appStore";
@@ -25,17 +26,28 @@ import EnrolledCourseView from "./pages/EnrolledCourseView";
 import Catalog from "./pages/Catalog";
 import CourseDetails from "./pages/CourseDetails";
 import Cart from "./pages/Cart";
+import BookADemo from "./pages/BookADemo";
 import BanCheck from "./Components/Common/BanCheck";
 import ProtectedRoute from "./Components/Common/ProtectedRoute";
 import EnrolledCourseRoute from "./Components/Common/EnrolledCourseRoute";
 import InstructorCourseRoute from "./Components/Common/InstructorCourseRoute";
 import Unauthorized from "./pages/Unauthorized";
   function App() {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    const toggleSidebar = () => {
+      setIsSidebarOpen(!isSidebarOpen);
+    };
+
+    const closeSidebar = () => {
+      setIsSidebarOpen(false);
+    };
+
     return (
       <Provider store={appStore}>
         <BanCheck>
           <div className="w-screen min-h-screen bg-richblack-900 flex flex-col font-inter">
-            <Navbar></Navbar>
+            <Navbar onToggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
             <Routes>
               {/* Public Routes - No Authentication Required */}
               <Route path="/" element={<Home/>} />
@@ -47,11 +59,12 @@ import Unauthorized from "./pages/Unauthorized";
               <Route path="/catalog" element={<Catalog/>} />
               <Route path="/catalog/:catalogName" element={<Catalog/>} />
               <Route path="/course/:courseId" element={<CourseDetails/>} />
-              
+              <Route path="/bookADemo" element={<BookADemo/>} />
+
               {/* Protected Routes - Authentication Required */}
               <Route path="/dashboard" element={
                 <ProtectedRoute requireAuth={true}>
-                  <Dashboard/>
+                  <Dashboard isMobileMenuOpen={isSidebarOpen} closeMobileMenu={closeSidebar} />
                 </ProtectedRoute>
               }>
                 <Route path="myProfile" element={<MyProfile />} />

@@ -132,24 +132,25 @@ const AddCourse = () => {
   return (
     <div className="text-richblack-5">
       {/* Header */}
-      <div className="flex items-center gap-4 mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
         <button
           onClick={handleBack}
-          className="flex items-center gap-2 text-richblack-200 hover:text-richblack-5 transition-colors duration-200"
+          className="flex items-center gap-2 text-richblack-200 hover:text-richblack-5 transition-colors duration-200 text-sm sm:text-base"
         >
-          <VscArrowLeft className="text-lg" />
-          Back to Courses
+          <VscArrowLeft className="text-base sm:text-lg" />
+          <span className="hidden sm:inline">Back to Courses</span>
+          <span className="sm:hidden">Back</span>
         </button>
-        <div className="h-6 w-px bg-richblack-600"></div>
-        <h1 className="text-3xl font-bold text-richblack-5">Create New Course</h1>
+        <div className="hidden sm:block h-6 w-px bg-richblack-600"></div>
+        <h1 className="text-2xl sm:text-3xl font-bold text-richblack-5">Create New Course</h1>
       </div>
 
       {/* Form */}
-      <div className="bg-richblack-800 p-8 rounded-lg border border-richblack-700">
-        <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="bg-richblack-800 p-4 sm:p-8 rounded-lg border border-richblack-700">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {/* Course Name */}
           <div>
-            <label htmlFor="courseName" className="block text-sm font-medium text-richblack-200 mb-2">
+            <label htmlFor="courseName" className="block text-xs sm:text-sm font-medium text-richblack-200 mb-2">
               Course Name *
             </label>
             <input
@@ -159,14 +160,14 @@ const AddCourse = () => {
               value={formData.courseName}
               onChange={handleInputChange}
               required
-              className="w-full px-4 py-3 bg-richblack-700 border border-richblack-600 rounded-lg text-richblack-5 placeholder-richblack-400 focus:outline-none focus:ring-2 focus:ring-yellow-25 focus:border-transparent"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-richblack-700 border border-richblack-600 rounded-lg text-richblack-5 placeholder-richblack-400 focus:outline-none focus:ring-2 focus:ring-yellow-25 focus:border-transparent text-sm sm:text-base"
               placeholder="Enter course name"
             />
           </div>
 
           {/* Course Description */}
           <div>
-            <label htmlFor="courseDescription" className="block text-sm font-medium text-richblack-200 mb-2">
+            <label htmlFor="courseDescription" className="block text-xs sm:text-sm font-medium text-richblack-200 mb-2">
               Course Description *
             </label>
             <textarea
@@ -176,14 +177,14 @@ const AddCourse = () => {
               onChange={handleInputChange}
               required
               rows={4}
-              className="w-full px-4 py-3 bg-richblack-700 border border-richblack-600 rounded-lg text-richblack-5 placeholder-richblack-400 focus:outline-none focus:ring-2 focus:ring-yellow-25 focus:border-transparent"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-richblack-700 border border-richblack-600 rounded-lg text-richblack-5 placeholder-richblack-400 focus:outline-none focus:ring-2 focus:ring-yellow-25 focus:border-transparent text-sm sm:text-base"
               placeholder="Describe what your course is about"
             />
           </div>
 
           {/* What You Will Learn */}
           <div>
-            <label htmlFor="whatYouWillLearn" className="block text-sm font-medium text-richblack-200 mb-2">
+            <label htmlFor="whatYouWillLearn" className="block text-xs sm:text-sm font-medium text-richblack-200 mb-2">
               What You Will Learn *
             </label>
             <textarea
@@ -193,7 +194,7 @@ const AddCourse = () => {
               onChange={handleInputChange}
               required
               rows={4}
-              className="w-full px-4 py-3 bg-richblack-700 border border-richblack-600 rounded-lg text-richblack-5 placeholder-richblack-400 focus:outline-none focus:ring-2 focus:ring-yellow-25 focus:border-transparent"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-richblack-700 border border-richblack-600 rounded-lg text-richblack-5 placeholder-richblack-400 focus:outline-none focus:ring-2 focus:ring-yellow-25 focus:border-transparent text-sm sm:text-base"
               placeholder="List the key learning outcomes (use markdown format)"
             />
             <p className="text-xs text-richblack-400 mt-1">
@@ -202,10 +203,10 @@ const AddCourse = () => {
           </div>
 
           {/* Price and Category Row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             {/* Price */}
             <div>
-              <label htmlFor="price" className="block text-sm font-medium text-richblack-200 mb-2">
+              <label htmlFor="price" className="block text-xs sm:text-sm font-medium text-richblack-200 mb-2">
                 Price (₹) *
               </label>
               <input
@@ -216,14 +217,14 @@ const AddCourse = () => {
                 onChange={handleInputChange}
                 required
                 min="0"
-                className="w-full px-4 py-3 bg-richblack-700 border border-richblack-600 rounded-lg text-richblack-5 placeholder-richblack-400 focus:outline-none focus:ring-2 focus:ring-yellow-25 focus:border-transparent"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-richblack-700 border border-richblack-600 rounded-lg text-richblack-5 placeholder-richblack-400 focus:outline-none focus:ring-2 focus:ring-yellow-25 focus:border-transparent text-sm sm:text-base"
                 placeholder="0"
               />
             </div>
 
             {/* Category */}
             <div>
-              <label htmlFor="category" className="block text-sm font-medium text-richblack-200 mb-2">
+              <label htmlFor="category" className="block text-xs sm:text-sm font-medium text-richblack-200 mb-2">
                 Category *
               </label>
               <select
@@ -232,7 +233,7 @@ const AddCourse = () => {
                 value={formData.category}
                 onChange={handleInputChange}
                 required
-                className="w-full px-4 py-3 bg-richblack-700 border border-richblack-600 rounded-lg text-richblack-5 focus:outline-none focus:ring-2 focus:ring-yellow-25 focus:border-transparent"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-richblack-700 border border-richblack-600 rounded-lg text-richblack-5 focus:outline-none focus:ring-2 focus:ring-yellow-25 focus:border-transparent text-sm sm:text-base"
               >
                 <option value="">Select a category</option>
                 {categoriesLoading && <option value="">Loading categories...</option>}
@@ -253,7 +254,7 @@ const AddCourse = () => {
 
           {/* Tags */}
           <div>
-            <label htmlFor="tag" className="block text-sm font-medium text-richblack-200 mb-2">
+            <label htmlFor="tag" className="block text-xs sm:text-sm font-medium text-richblack-200 mb-2">
               Tags
             </label>
             <input
@@ -262,7 +263,7 @@ const AddCourse = () => {
               name="tag"
               value={formData.tag}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-richblack-700 border border-richblack-600 rounded-lg text-richblack-5 placeholder-richblack-400 focus:outline-none focus:ring-2 focus:ring-yellow-25 focus:border-transparent"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-richblack-700 border border-richblack-600 rounded-lg text-richblack-5 placeholder-richblack-400 focus:outline-none focus:ring-2 focus:ring-yellow-25 focus:border-transparent text-sm sm:text-base"
               placeholder="Enter tags separated by commas"
             />
             <p className="text-xs text-richblack-400 mt-1">
@@ -272,10 +273,10 @@ const AddCourse = () => {
 
           {/* Thumbnail Upload */}
           <div>
-            <label htmlFor="thumbnailImage" className="block text-sm font-medium text-richblack-200 mb-2">
+            <label htmlFor="thumbnailImage" className="block text-xs sm:text-sm font-medium text-richblack-200 mb-2">
               Course Thumbnail *
             </label>
-            <div className="border-2 border-dashed border-richblack-600 rounded-lg p-6 text-center hover:border-richblack-500 transition-colors duration-200">
+            <div className="border-2 border-dashed border-richblack-600 rounded-lg p-4 sm:p-6 text-center hover:border-richblack-500 transition-colors duration-200">
               <input
                 type="file"
                 id="thumbnailImage"
@@ -286,11 +287,11 @@ const AddCourse = () => {
                 className="hidden"
               />
               <label htmlFor="thumbnailImage" className="cursor-pointer">
-                <VscCloudUpload className="mx-auto text-4xl text-richblack-400 mb-2" />
-                <p className="text-richblack-200 mb-1">
+                <VscCloudUpload className="mx-auto text-3xl sm:text-4xl text-richblack-400 mb-2" />
+                <p className="text-richblack-200 mb-1 text-sm sm:text-base">
                   {formData.thumbnailImage ? formData.thumbnailImage.name : 'Click to upload thumbnail'}
                 </p>
-                <p className="text-sm text-richblack-400">
+                <p className="text-xs sm:text-sm text-richblack-400">
                   PNG, JPG, JPEG up to 10MB
                 </p>
               </label>
@@ -300,25 +301,25 @@ const AddCourse = () => {
                 <img
                   src={URL.createObjectURL(formData.thumbnailImage)}
                   alt="Preview"
-                  className="w-32 h-24 object-cover rounded-lg border border-richblack-600"
+                  className="w-24 h-18 sm:w-32 sm:h-24 object-cover rounded-lg border border-richblack-600"
                 />
               </div>
             )}
           </div>
 
           {/* Submit Button */}
-          <div className="flex justify-end gap-4 pt-6">
+          <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-4 pt-4 sm:pt-6">
             <button
               type="button"
               onClick={handleBack}
-              className="px-6 py-3 text-richblack-200 hover:text-richblack-5 transition-colors duration-200"
+              className="px-4 sm:px-6 py-2 sm:py-3 text-richblack-200 hover:text-richblack-5 transition-colors duration-200 text-sm sm:text-base"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-8 py-3 bg-yellow-25 text-richblack-900 rounded-lg font-medium hover:bg-yellow-50 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 sm:px-8 py-2 sm:py-3 bg-yellow-25 text-richblack-900 rounded-lg font-medium hover:bg-yellow-50 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
             >
               {loading ? 'Creating...' : 'Create Course'}
             </button>

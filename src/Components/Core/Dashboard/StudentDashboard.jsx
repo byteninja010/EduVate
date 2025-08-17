@@ -171,16 +171,16 @@ const StudentDashboard = () => {
   return (
     <div className="text-richblack-5">
       {/* Welcome Header */}
-      <div className="mb-8">
-        <div className="flex items-center gap-4 mb-4">
-          <div className="w-16 h-16 bg-gradient-to-br from-yellow-25 to-yellow-50 rounded-full flex items-center justify-center">
-            <VscMortarBoard className="text-3xl text-richblack-900" />
+      <div className="mb-6 lg:mb-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-4">
+          <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-yellow-25 to-yellow-50 rounded-full flex items-center justify-center flex-shrink-0">
+            <VscMortarBoard className="text-2xl sm:text-3xl text-richblack-900" />
           </div>
-          <div>
-            <h1 className="text-4xl font-bold text-richblack-5">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-richblack-5 leading-tight">
               {getGreeting()}, {user?.firstName || 'Student'}! 👋
             </h1>
-            <p className="text-richblack-200 text-lg mt-1">
+            <p className="text-richblack-200 text-base sm:text-lg mt-1">
               Ready to continue your learning journey?
             </p>
           </div>
@@ -188,43 +188,43 @@ const StudentDashboard = () => {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 lg:mb-8">
         {/* Courses Enrolled */}
-        <div className="bg-gradient-to-br from-richblack-800 to-richblack-700 p-6 rounded-xl border border-richblack-600 hover:border-richblack-500 transition-all duration-300 group">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <VscMortarBoard className="text-2xl text-white" />
+        <div className="bg-gradient-to-br from-richblack-800 to-richblack-700 p-4 sm:p-6 rounded-xl border border-richblack-600 hover:border-richblack-500 transition-all duration-300 group">
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <VscMortarBoard className="text-xl sm:text-2xl text-white" />
             </div>
-            <VscArrowUp className="text-2xl text-blue-400 opacity-60" />
+            <VscArrowUp className="text-xl sm:text-2xl text-blue-400 opacity-60" />
           </div>
-          <h3 className="text-richblack-200 text-sm font-medium mb-1">Courses Enrolled</h3>
-          <p className="text-3xl font-bold text-blue-400">{stats.totalCourses}</p>
+          <h3 className="text-richblack-200 text-xs sm:text-sm font-medium mb-1">Courses Enrolled</h3>
+          <p className="text-2xl sm:text-3xl font-bold text-blue-400">{stats.totalCourses}</p>
         </div>
 
         {/* Average Progress */}
-        <div className="bg-gradient-to-br from-richblack-800 to-richblack-700 p-6 rounded-xl border border-richblack-600 hover:border-richblack-500 transition-all duration-300 group">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-caribbeangreen-500 to-caribbeangreen-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <VscGraph className="text-2xl text-white" />
+        <div className="bg-gradient-to-br from-richblack-800 to-richblack-700 p-4 sm:p-6 rounded-xl border border-richblack-600 hover:border-richblack-500 transition-all duration-300 group">
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-caribbeangreen-500 to-caribbeangreen-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <VscGraph className="text-xl sm:text-2xl text-white" />
             </div>
-            <VscArrowUp className="text-2xl text-caribbeangreen-400 opacity-60" />
+            <VscArrowUp className="text-xl sm:text-2xl text-caribbeangreen-400 opacity-60" />
           </div>
-          <h3 className="text-richblack-200 text-sm font-medium mb-1">Avg. Progress</h3>
-          <p className={`text-3xl font-bold ${getProgressColor(stats.avgProgress)}`}>
+          <h3 className="text-richblack-200 text-xs sm:text-sm font-medium mb-1">Avg. Progress</h3>
+          <p className={`text-2xl sm:text-3xl font-bold ${getProgressColor(stats.avgProgress)}`}>
             {stats.avgProgress}%
           </p>
         </div>
 
         {/* Total Learning Time */}
-        <div className="bg-gradient-to-br from-richblack-800 to-richblack-700 p-6 rounded-xl border border-richblack-600 hover:border-richblack-500 transition-all duration-300 group">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <VscCalendar className="text-2xl text-white" />
+        <div className="bg-gradient-to-br from-richblack-800 to-richblack-700 p-4 sm:p-6 rounded-xl border border-richblack-600 hover:border-richblack-500 transition-all duration-300 group">
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <VscCalendar className="text-xl sm:text-2xl text-white" />
             </div>
-            <VscArrowUp className="text-2xl text-purple-400 opacity-60" />
+            <VscArrowUp className="text-xl sm:text-2xl text-purple-400 opacity-60" />
           </div>
-          <h3 className="text-richblack-200 text-sm font-medium mb-1">Total Duration</h3>
-          <p className="text-3xl font-bold text-purple-400">
+          <h3 className="text-richblack-200 text-xs sm:text-sm font-medium mb-1">Total Duration</h3>
+          <p className="text-2xl sm:text-3xl font-bold text-purple-400">
             {stats.totalDuration > 0 ? formatDuration(stats.totalDuration) : 'N/A'}
           </p>
           {stats.totalDuration === 0 && (
@@ -233,58 +233,58 @@ const StudentDashboard = () => {
         </div>
 
         {/* Wallet Balance */}
-        <div className="bg-gradient-to-br from-richblack-800 to-richblack-700 p-6 rounded-xl border border-richblack-600 hover:border-richblack-500 transition-all duration-300 group">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-yellow-25 to-yellow-50 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <VscCreditCard className="text-2xl text-richblack-900" />
+        <div className="bg-gradient-to-br from-richblack-800 to-richblack-700 p-4 sm:p-6 rounded-xl border border-richblack-600 hover:border-richblack-500 transition-all duration-300 group">
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-yellow-25 to-yellow-50 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <VscCreditCard className="text-xl sm:text-2xl text-richblack-900" />
             </div>
-            <VscArrowUp className="text-2xl text-yellow-25 opacity-60" />
+            <VscArrowUp className="text-xl sm:text-2xl text-yellow-25 opacity-60" />
           </div>
-          <h3 className="text-richblack-200 text-sm font-medium mb-1">Wallet Balance</h3>
-          <p className="text-3xl font-bold text-yellow-25">₹{wallet?.balance || 0}</p>
+          <h3 className="text-richblack-200 text-xs sm:text-sm font-medium mb-1">Wallet Balance</h3>
+          <p className="text-2xl sm:text-3xl font-bold text-yellow-25">₹{wallet?.balance || 0}</p>
         </div>
       </div>
 
       {/* Continue Learning Section */}
       {enrolledCourses.length > 0 && (
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-richblack-5">Continue Learning</h2>
+        <div className="mb-6 lg:mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4 sm:mb-6">
+            <h2 className="text-xl sm:text-2xl font-bold text-richblack-5">Continue Learning</h2>
             <button
               onClick={() => navigate('/dashboard/enrolled-courses')}
-              className="text-yellow-25 hover:text-yellow-50 transition-colors font-medium"
+              className="text-yellow-25 hover:text-yellow-50 transition-colors font-medium text-sm sm:text-base"
             >
               View All Courses →
             </button>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {enrolledCourses.slice(0, 3).map((course) => (
               <div key={course._id} className="bg-gradient-to-br from-richblack-800 to-richblack-700 rounded-xl border border-richblack-600 hover:border-richblack-500 transition-all duration-300 group cursor-pointer overflow-hidden">
                 <div className="relative">
                   <img 
                     src={course.thumbnail} 
                     alt={course.courseName}
-                    className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-24 sm:h-32 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-richblack-900/80 to-transparent" />
-                  <div className="absolute bottom-3 left-3 right-3">
-                    <h3 className="text-richblack-5 font-semibold text-sm line-clamp-2">
+                  <div className="absolute bottom-2 sm:bottom-3 left-2 sm:left-3 right-2 sm:right-3">
+                    <h3 className="text-richblack-5 font-semibold text-xs sm:text-sm line-clamp-2">
                       {course.courseName}
                     </h3>
                   </div>
                 </div>
                 
-                <div className="p-4">
-                  <div className="flex items-center justify-between mb-3">
+                <div className="p-3 sm:p-4">
+                  <div className="flex items-center justify-between mb-2 sm:mb-3">
                     <span className="text-richblack-200 text-xs">{course.totalDuration}</span>
                     <div className="flex items-center gap-1">
-                      <VscStarFull className="text-yellow-25 text-sm" />
+                      <VscStarFull className="text-yellow-25 text-xs sm:text-sm" />
                       <span className="text-richblack-200 text-xs">4.5</span>
                     </div>
                   </div>
                   
-                  <div className="mb-4">
+                  <div className="mb-3 sm:mb-4">
                     <div className="flex items-center justify-between text-xs text-richblack-200 mb-1">
                       <span>Progress</span>
                       <span>{course.progressPercentage}%</span>
@@ -299,9 +299,9 @@ const StudentDashboard = () => {
                   
                   <button
                     onClick={() => navigate(`/enrolled-course/${course._id}`)}
-                    className="w-full flex items-center justify-center gap-2 bg-yellow-25 text-richblack-900 py-2 px-4 rounded-lg font-medium hover:bg-yellow-50 transition-all duration-200 group-hover:scale-105"
+                    className="w-full flex items-center justify-center gap-2 bg-yellow-25 text-richblack-900 py-2 px-3 sm:px-4 rounded-lg font-medium hover:bg-yellow-50 transition-all duration-200 group-hover:scale-105 text-sm"
                   >
-                    <VscPlay className="text-sm" />
+                    <VscPlay className="text-xs sm:text-sm" />
                     Continue Learning
                   </button>
                 </div>
@@ -312,31 +312,34 @@ const StudentDashboard = () => {
       )}
 
       {/* Quick Actions */}
-      <div className="bg-gradient-to-br from-richblack-800 to-richblack-700 rounded-xl border border-richblack-600 p-6">
-        <h2 className="text-xl font-semibold text-richblack-5 mb-4">Quick Actions</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="bg-gradient-to-br from-richblack-800 to-richblack-700 rounded-xl border border-richblack-600 p-4 sm:p-6">
+        <h2 className="text-lg sm:text-xl font-semibold text-richblack-5 mb-4">Quick Actions</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           <button
             onClick={() => navigate('/catalog/Development')}
-            className="flex items-center gap-3 p-4 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 text-white font-medium"
+            className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 text-white font-medium text-sm sm:text-base"
           >
-            <VscMortarBoard className="text-xl" />
-            Explore New Courses
+            <VscMortarBoard className="text-lg sm:text-xl" />
+            <span className="hidden sm:inline">Explore New Courses</span>
+            <span className="sm:hidden">Explore Courses</span>
           </button>
           
           <button
             onClick={() => navigate('/dashboard/wallet')}
-            className="flex items-center gap-3 p-4 bg-gradient-to-r from-yellow-25 to-yellow-50 rounded-lg hover:from-yellow-50 hover:to-yellow-100 transition-all duration-200 text-richblack-900 font-medium"
+            className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-gradient-to-r from-yellow-25 to-yellow-50 rounded-lg hover:from-yellow-50 hover:to-yellow-100 transition-all duration-200 text-richblack-900 font-medium text-sm sm:text-base"
           >
-            <VscCreditCard className="text-xl" />
-            Manage Wallet
+            <VscCreditCard className="text-lg sm:text-xl" />
+            <span className="hidden sm:inline">Manage Wallet</span>
+            <span className="sm:hidden">Wallet</span>
           </button>
           
           <button
             onClick={() => navigate('/dashboard/myProfile')}
-            className="flex items-center gap-3 p-4 bg-gradient-to-r from-caribbeangreen-600 to-caribbeangreen-700 rounded-lg hover:from-caribbeangreen-700 hover:to-caribbeangreen-800 transition-all duration-200 text-white font-medium"
+            className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-gradient-to-r from-caribbeangreen-600 to-caribbeangreen-700 rounded-lg hover:from-caribbeangreen-700 hover:to-caribbeangreen-800 transition-all duration-200 text-white font-medium text-sm sm:text-base"
           >
-            <VscMortarBoard className="text-xl" />
-            Update Profile
+            <VscMortarBoard className="text-lg sm:text-xl" />
+            <span className="hidden sm:inline">Update Profile</span>
+            <span className="sm:hidden">Profile</span>
           </button>
         </div>
       </div>
