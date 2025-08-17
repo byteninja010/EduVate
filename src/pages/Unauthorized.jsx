@@ -4,7 +4,6 @@ import { VscShield, VscArrowLeft, VscHome } from 'react-icons/vsc';
 
 const Unauthorized = () => {
   const location = useLocation();
-  const from = location.state?.from?.pathname || '/';
 
   return (
     <div className="min-h-screen bg-richblack-900 flex items-center justify-center px-6">
@@ -25,15 +24,7 @@ const Unauthorized = () => {
           Please contact an administrator if you believe this is an error.
         </p>
 
-        {/* Debug Info (only in development) */}
-        {process.env.NODE_ENV === 'development' && (
-          <div className="bg-richblack-800 rounded-lg p-4 mb-8 text-left">
-            <p className="text-sm text-richblack-400 mb-2">Debug Info:</p>
-            <p className="text-xs text-richblack-300">
-              Attempted to access: {from}
-            </p>
-          </div>
-        )}
+
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">

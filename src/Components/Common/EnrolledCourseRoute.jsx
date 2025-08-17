@@ -21,8 +21,6 @@ const EnrolledCourseRoute = ({ children }) => {
       }
 
       try {
-        console.log('Checking enrollment for course:', courseId);
-        
         // Try multiple approaches to check enrollment
         
         // Approach 1: Check course progress
@@ -36,18 +34,13 @@ const EnrolledCourseRoute = ({ children }) => {
             }
           );
 
-          console.log('Course progress response:', progressResponse);
-
           if (progressResponse.data.success) {
-            console.log('User is enrolled (found course progress)');
             setIsEnrolled(true);
             setLoading(false);
             return;
-          } else {
-            console.log('Course progress check failed:', progressResponse.data);
           }
         } catch (progressError) {
-          console.log('Course progress check failed:', progressError);
+          // Course progress check failed, try next approach
         }
 
         // Approach 2: Check enrolled courses from profile
@@ -61,29 +54,21 @@ const EnrolledCourseRoute = ({ children }) => {
             }
           );
 
-          console.log('Enrolled courses response:', enrolledResponse);
-
           if (enrolledResponse.data.success) {
             const enrolledCourses = enrolledResponse.data.data;
-            console.log('Enrolled courses found:', enrolledCourses);
             const isEnrolledInCourse = enrolledCourses.some(course => course._id === courseId);
-            console.log('Is enrolled in this course:', isEnrolledInCourse);
             
             if (isEnrolledInCourse) {
-              console.log('User is enrolled (found in enrolled courses)');
               setIsEnrolled(true);
               setLoading(false);
               return;
             }
-          } else {
-            console.log('Enrolled courses check failed:', enrolledResponse.data);
           }
         } catch (enrolledError) {
-          console.log('Enrolled courses check failed:', enrolledError);
+          // Enrolled courses check failed
         }
 
         // If we reach here, user is not enrolled
-        console.log('User is not enrolled in course');
         setIsEnrolled(false);
         
       } catch (error) {
@@ -112,12 +97,6 @@ const EnrolledCourseRoute = ({ children }) => {
 
   // If not enrolled, redirect to course details
   if (!isEnrolled) {
-    // Temporary bypass for development/testing (remove in production)
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Development mode: Bypassing enrollment check');
-      return children;
-    }
-    
     toast.error('You are not enrolled in this course');
     return <Navigate to={`/course/${courseId}`} replace />;
   }

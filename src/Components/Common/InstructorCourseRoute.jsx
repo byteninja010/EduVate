@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { apiConnector } from '../../services/apiconnector';
-import { courseEndpoints, courseProgressEndpoints } from '../../services/apis';
+import { courseEndpoints } from '../../services/apis';
 import toast from 'react-hot-toast';
 
 const InstructorCourseRoute = ({ children }) => {
@@ -21,11 +21,6 @@ const InstructorCourseRoute = ({ children }) => {
       }
 
       try {
-        console.log('Checking ownership for course:', courseId);
-        console.log('Current user:', user);
-        console.log('User ID type:', typeof user._id);
-        console.log('User ID value:', user._id);
-        
         // Try multiple approaches to check ownership
         
         // Approach 1: Check course details
@@ -39,20 +34,10 @@ const InstructorCourseRoute = ({ children }) => {
             }
           );
 
-          console.log('Course details response:', response);
-
           if (response.data.success) {
             const course = response.data.data;
-            console.log('Course data:', course);
-            console.log('Course instructor ID:', course.instructor);
-            console.log('User ID:', user._id);
-            console.log('Are they equal?', course.instructor === user._id);
             
             // Check if the current user is the instructor of this course
-            console.log('Course instructor type:', typeof course.instructor);
-            console.log('Course instructor value:', course.instructor);
-            
-            // Try different ways to compare IDs
             const ownsCourse = (
               course.instructor === user._id ||
               course.instructor === user.id ||
@@ -60,24 +45,14 @@ const InstructorCourseRoute = ({ children }) => {
               course.instructor?.toString() === user.id?.toString()
             );
             
-            console.log('User owns course:', ownsCourse);
-            console.log('Comparison details:', {
-              'course.instructor === user._id': course.instructor === user._id,
-              'course.instructor === user.id': course.instructor === user.id,
-              'course.instructor?.toString() === user._id?.toString()': course.instructor?.toString() === user._id?.toString(),
-              'course.instructor?.toString() === user.id?.toString()': course.instructor?.toString() === user.id?.toString()
-            });
-            
             if (ownsCourse) {
               setIsOwner(true);
               setLoading(false);
               return;
             }
-          } else {
-            console.log('Course details check failed:', response.data);
           }
         } catch (detailsError) {
-          console.log('Course details check failed:', detailsError);
+          // Course details check failed, try next approach
         }
 
         // Approach 2: Check instructor's courses
@@ -91,12 +66,8 @@ const InstructorCourseRoute = ({ children }) => {
             }
           );
 
-          console.log('Instructor courses response:', instructorResponse);
-
           if (instructorResponse.data.success) {
             const instructorCourses = instructorResponse.data.data;
-            console.log('Instructor courses found:', instructorCourses);
-            console.log('Looking for course ID:', courseId);
             
             // Try different ways to find the course
             const ownsThisCourse = instructorCourses.some(course => {
@@ -106,26 +77,20 @@ const InstructorCourseRoute = ({ children }) => {
                 course._id?.toString() === courseId?.toString() ||
                 course.id?.toString() === courseId?.toString()
               );
-              console.log(`Course ${course._id || course.id} matches ${courseId}:`, courseMatch);
               return courseMatch;
             });
-            
-            console.log('Owns this course:', ownsThisCourse);
             
             if (ownsThisCourse) {
               setIsOwner(true);
               setLoading(false);
               return;
             }
-          } else {
-            console.log('Instructor courses check failed:', instructorResponse.data);
           }
         } catch (instructorError) {
-          console.log('Instructor courses check failed:', instructorError);
+          // Instructor courses check failed
         }
 
         // If we reach here, user doesn't own the course
-        console.log('User does not own this course');
         setIsOwner(false);
       } catch (error) {
         console.error('Error checking course ownership:', error);
@@ -153,12 +118,6 @@ const InstructorCourseRoute = ({ children }) => {
 
   // If not the owner, redirect to unauthorized
   if (!isOwner) {
-    // Temporary bypass for development/testing (remove in production)
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Development mode: Bypassing ownership check');
-      return children;
-    }
-    
     toast.error('You can only manage your own courses');
     return <Navigate to="/unauthorized" replace />;
   }

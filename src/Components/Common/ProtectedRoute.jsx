@@ -20,9 +20,8 @@ const ProtectedRoute = ({
 
   // Check if user is authenticated
   if (!token) {
-    // Redirect to login with return URL in both state and query params
-    const returnUrl = encodeURIComponent(location.pathname + location.search);
-    return <Navigate to={`${redirectTo}?returnUrl=${returnUrl}`} state={{ from: location }} replace />;
+    // Redirect to login with return URL
+    return <Navigate to={redirectTo} state={{ from: location }} replace />;
   }
 
   // If no specific account types are required, just check authentication
