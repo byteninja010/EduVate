@@ -46,11 +46,12 @@ const userSchema=new mongoose.Schema({
     },
     resetPasswordExpires:{
         type:Date,
+    },
+    isBanned:{
+        type:Boolean,
+        default:false
     }
-        
-
-
-});
+}, { timestamps: true });
 
 const userModel=mongoose.model("userModel",userSchema);
 module.exports=userModel;

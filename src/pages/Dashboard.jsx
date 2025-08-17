@@ -17,6 +17,8 @@ const Dashboard = () => {
                 navigate('/dashboard/instructor');
             } else if (user?.accountType === ACCOUNT_TYPE.STUDENT) {
                 navigate('/dashboard/student');
+            } else if (user?.accountType === ACCOUNT_TYPE.ADMIN) {
+                navigate('/admin');
             }
         }
     }, [user, navigate, location.pathname]);

@@ -5,34 +5,43 @@ import { apiConnector } from "../services/apiconnector";
 import toast from "react-hot-toast";
 import CardComponent from "../Components/Core/Courses/CardComponent";
 import { VscBook, VscMortarBoard, VscPulse, VscStarFull, VscWatch, VscPerson } from "react-icons/vsc";
+import { useSelector, useDispatch } from "react-redux";
+import { setCategories } from "../slices/courseSlice";
 
 const Catalog = () => {
   const { GET_COURSES_BY_CATEGORY } = courseEndpoints;
   const { CATEGORIES_API } = categories;
   const { catalogName } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   
   const [loading, setLoading] = useState(false);
   const [courses, setCourses] = useState([]);
-  const [categoriesState, setCategories] = useState([]);
+  const courseState = useSelector((state) => state.course);
+  const categoriesState = courseState?.categories || [];
+  
+  // Removed storeVersion since it's no longer needed
   const [selectedCategory, setSelectedCategory] = useState(catalogName || null);
   const [showAllCategories, setShowAllCategories] = useState(!catalogName);
 
   useEffect(() => {
-    fetchCategories();
+    // Always fetch categories on mount if we don't have them
+    if (!categoriesState || categoriesState.length === 0) {
+      fetchCategories();
+    }
+    
     if (catalogName) {
       fetchCourseByCategory(catalogName);
     }
-  }, [catalogName]);
+  }, [catalogName]); // Only depend on catalogName changes
+
+  // Log when store changes - removed since issue is fixed
 
   const fetchCategories = async () => {
     try {
-      console.log("Fetching categories from:", CATEGORIES_API);
       const res = await apiConnector("GET", CATEGORIES_API);
-      console.log("Categories response:", res);
       if (res.data.success) {
-        setCategories(res.data.allCategorys || []);
-        console.log("Categories set:", res.data.allCategorys);
+        dispatch(setCategories(res.data.allCategorys || []));
       } else {
         console.error("Categories API failed:", res.data);
       }
@@ -62,6 +71,8 @@ const Catalog = () => {
   const handleCategoryClick = (categoryName) => {
     navigate(`/catalog/${categoryName}`);
   };
+
+
 
   const handleBackToCategories = () => {
     setShowAllCategories(true);
@@ -93,7 +104,12 @@ const Catalog = () => {
     return iconMap[categoryName] || '📚';
   };
 
-  // Loading state
+  // Check if Redux store is initialized (but allow fallback)
+  if (!courseState) {
+    console.log('CourseState not ready, but continuing...');
+  }
+
+  // Loading state for courses (not categories)
   if (loading) {
     return (
       <div className="min-h-screen bg-richblack-900 flex items-center justify-center">
@@ -105,8 +121,10 @@ const Catalog = () => {
     );
   }
 
-  // Show all categories view
-  if (showAllCategories) {
+  // Debug logging - removed since issue is fixed
+
+  // Show all categories view (default to true if no specific category is selected)
+  if (showAllCategories || !catalogName) {
     return (
       <div className="min-h-screen bg-richblack-900">
         {/* Hero Section */}
@@ -142,7 +160,7 @@ const Catalog = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 auto-rows-fr">
-            {categoriesState.length > 0 ? (
+            {Array.isArray(categoriesState) && categoriesState.length > 0 ? (
               categoriesState.map((category) => (
                 <div
                   key={category._id}
@@ -178,7 +196,7 @@ const Catalog = () => {
                   We're working on setting up course categories. Please check back later!
                 </p>
                 <div className="text-richblack-300">
-                  <p>Debug info: Categories array length: {categoriesState.length}</p>
+                  <p>Debug info: Categories array length: {Array.isArray(categoriesState) ? categoriesState.length : 'Not an array'}</p>
                   <p>Categories data: {JSON.stringify(categoriesState)}</p>
                 </div>
               </div>

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { NavbarLinks } from "../../data/navbar-links";
 import { useLocation } from "react-router-dom";
 import { matchPath } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { useState, useEffect } from "react";
 import { apiConnector } from "../../services/apiconnector";
@@ -12,18 +12,22 @@ import { categories } from "../../services/apis";
 import { FaShoppingCart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../services/operations/authAPI";
-import { useDispatch } from "react-redux";
 import { ACCOUNT_TYPE } from "../../utils/constants";
+// Removed setCategories import since it's no longer used
 
 const Navbar = () => {
-  const navigate=useNavigate();
+    const navigate=useNavigate();
   const dispatch=useDispatch();
   const location = useLocation();
-  const [subLinks, setSubLinks] = useState([]);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const token = useSelector((store) => store.auth.token);
   const user = useSelector((store) => store.profile.user);
- // console.log(user);
+  const courseState = useSelector((store) => store.course);
+  const categories = courseState?.categories || [];
+  
+  // Ensure we have a safe default for categories
+  const safeCategories = Array.isArray(categories) ? categories : [];
+  // console.log(user);
   const cart = useSelector((store) => store.cart.items);
   
   const handleLogOut=()=>{
@@ -43,18 +47,29 @@ const Navbar = () => {
     setShowProfileMenu(!showProfileMenu);
   }
 
-  const fetchData = async () => {
-    try {
-      const result = await apiConnector("GET", categories.CATEGORIES_API);
-      setSubLinks(result.data.allCategorys);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // Remove duplicate category fetching - let Catalog.jsx handle it
+  // const fetchData = async () => {
+  //   try {
+  //     const result = await apiConnector("GET", categories.CATEGORIES_API);
+  //     dispatch(setCategories(result.data.allCategorys));
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   // Only fetch if the store is initialized
+  //   if (courseState) {
+  //     fetchData();
+  //   }
+  // }, [courseState]);
+
+  // // Refresh categories when they change in Redux store
+  // useEffect(() => {
+  //   if (courseState && safeCategories.length === 0) {
+  //     fetchData();
+  //   }
+  // }, [courseState, safeCategories.length]);
 
   // Close profile menu when clicking outside
   useEffect(() => {
@@ -70,7 +85,6 @@ const Navbar = () => {
     };
   }, [showProfileMenu]);
 
-  console.log(subLinks);
   const matchRoute = (route) => {
     return matchPath({ path: route }, location.pathname);
   };
@@ -108,9 +122,21 @@ const Navbar = () => {
                         </p>
                       </Link>
                                              <div className="absolute top-full left-0 bg-richblack-900 rounded-xl px-4 py-3 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-200 z-50 border border-yellow-25/20 shadow-2xl shadow-yellow-25/10 min-w-[220px] backdrop-blur-sm">
-                         {subLinks.map((cat,key) => {
-                            return <Link to={`/catalog/${cat.name}`} key={key}><p className="text-richblack-100 my-2 hover:text-yellow-25 hover:scale-105 transition-all duration-200 px-3 py-2 rounded-lg hover:bg-yellow-25/10 hover:bg-gradient-to-r hover:from-yellow-25/5 hover:to-transparent">{cat.name}</p></Link>;
-                         })}
+                         {!courseState ? (
+                           <div className="text-center py-4">
+                             <div className="w-4 h-4 border-2 border-yellow-25 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                             <p className="text-richblack-300 text-sm">Initializing...</p>
+                           </div>
+                         ) : !safeCategories || safeCategories.length === 0 ? (
+                           <div className="text-center py-4">
+                             <div className="w-4 h-4 border-2 border-yellow-25 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                             <p className="text-richblack-300 text-sm">Loading categories...</p>
+                           </div>
+                         ) : (
+                           safeCategories.map((cat,key) => {
+                              return <Link to={`/catalog/${cat.name}`} key={key}><p className="text-richblack-100 my-2 hover:text-yellow-25 hover:scale-105 transition-all duration-200 px-3 py-2 rounded-lg hover:bg-yellow-25/10 hover:bg-gradient-to-r hover:from-yellow-25/5 hover:to-transparent">{cat.name}</p></Link>;
+                           })
+                         )}
                        </div>
                     </div>
                   ) : (
@@ -134,6 +160,13 @@ const Navbar = () => {
         <div>
           {token ? (
             <div className="hidden md:flex flex-row gap-4 items-center text-richblack-25">
+              {/* Admin Access Link */}
+              {user?.accountType === 'Admin' && (
+                <Link to="/admin" className="bg-yellow-25/10 border border-yellow-25/20 rounded-lg px-3 py-2 hover:bg-yellow-25/20 transition-all duration-200">
+                  <p className="text-yellow-25 text-sm font-semibold">Admin Panel</p>
+                </Link>
+              )}
+              
               <Link to={"/cart"} className="relative"> 
                 <FaShoppingCart className="text-2xl relative"/>
                 <p className="absolute text-pink-500 top-[-7px] left-4 font-bold">{cart.length}</p>

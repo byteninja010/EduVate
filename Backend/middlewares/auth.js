@@ -20,6 +20,16 @@ exports.auth=async (req,res,next)=>{
         try{
             const decode=await jwt.verify(token,process.env.JWT_SECRET);
             req.user=decode;
+            
+            // Check if user is banned
+            const user = await userModule.findById(decode.id);
+            if (user && user.isBanned) {
+                return res.status(403).json({
+                    success: false,
+                    msg: "Your account has been banned. Please contact administration at admin@eduvate.in",
+                    isBanned: true
+                });
+            }
         }catch(err){
             //Verification error
             return res.status(401).json({
@@ -97,4 +107,25 @@ exports.isAdmin=async (req,res,next)=>{
         });
     }
 
+}
+
+// Check if user is banned
+exports.checkBanStatus = async (req, res, next) => {
+    try {
+        const user = await userModule.findById(req.user.id);
+        if (user && user.isBanned) {
+            return res.status(403).json({
+                success: false,
+                msg: "Your account has been banned. Please contact administration at admin@eduvate.in",
+                isBanned: true
+            });
+        }
+        next();
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            success: false,
+            msg: "Error in checking ban status"
+        });
+    }
 }

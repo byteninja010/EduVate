@@ -1,55 +1,82 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { VscCreditCard, VscAdd, VscArrowDown, VscArrowUp } from 'react-icons/vsc'
-import { getWallet, addMoney } from '../../../services/operations/walletAPI'
-import ConfirmationModal from '../../Common/ConfirmationModal'
+import { VscCreditCard, VscAdd, VscArrowDown, VscArrowUp, VscHistory, VscCheck, VscClose, VscWarning } from 'react-icons/vsc'
+import { getWallet, createMoneyRequest, getMoneyRequests } from '../../../services/operations/walletAPI'
+import { toast } from 'react-hot-toast'
 
 const Wallet = () => {
   const { token } = useSelector((state) => state.auth)
   const { user } = useSelector((state) => state.profile)
   const [wallet, setWallet] = useState(null)
+  const [moneyRequests, setMoneyRequests] = useState([])
   const [loading, setLoading] = useState(true)
-  const [showAddMoney, setShowAddMoney] = useState(false)
+  const [showMoneyRequest, setShowMoneyRequest] = useState(false)
   const [amount, setAmount] = useState('')
-  const [addingMoney, setAddingMoney] = useState(false)
+  const [reason, setReason] = useState('')
+  const [creatingRequest, setCreatingRequest] = useState(false)
 
   useEffect(() => {
-    fetchWallet()
+    fetchData()
   }, [token])
+
+  const fetchData = async () => {
+    try {
+      setLoading(true)
+      await Promise.all([fetchWallet(), fetchMoneyRequests()])
+    } catch (error) {
+      console.error('Failed to fetch data:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const fetchWallet = async () => {
     try {
-      setLoading(true)
       const response = await getWallet(token)
       if (response.success) {
         setWallet(response.data)
       }
     } catch (error) {
       console.error('Failed to fetch wallet:', error)
-    } finally {
-      setLoading(false)
     }
   }
 
-  const handleAddMoney = async (e) => {
+  const fetchMoneyRequests = async () => {
+    try {
+      const response = await getMoneyRequests(token)
+      if (response.success) {
+        setMoneyRequests(response.data)
+      }
+    } catch (error) {
+      console.error('Failed to fetch money requests:', error)
+    }
+  }
+
+  const handleCreateMoneyRequest = async (e) => {
     e.preventDefault()
     if (!amount || amount <= 0) {
-      alert('Please enter a valid amount')
+      toast.error('Please enter a valid amount')
+      return
+    }
+    if (!reason || reason.trim().length === 0) {
+      toast.error('Please provide a reason for the request')
       return
     }
 
-    setAddingMoney(true)
+    setCreatingRequest(true)
     try {
-      const response = await addMoney(parseInt(amount), token)
+      const response = await createMoneyRequest(parseInt(amount), reason.trim(), token)
       if (response.success) {
         setAmount('')
-        setShowAddMoney(false)
-        fetchWallet() // Refresh wallet data
+        setReason('')
+        setShowMoneyRequest(false)
+        fetchMoneyRequests() // Refresh money requests
+        toast.success('Money request created successfully! Admin will review it.')
       }
     } catch (error) {
-      console.error('Failed to add money:', error)
+      console.error('Failed to create money request:', error)
     } finally {
-      setAddingMoney(false)
+      setCreatingRequest(false)
     }
   }
 
@@ -61,6 +88,21 @@ const Wallet = () => {
       hour: '2-digit',
       minute: '2-digit'
     })
+  }
+
+
+
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case 'PENDING':
+        return <VscHistory style={{ color: '#E5C558' }} />
+      case 'APPROVED':
+        return <VscCheck style={{ color: '#ffffff' }} />
+      case 'REJECTED':
+        return <VscClose style={{ color: '#ffffff' }} />
+      default:
+        return null
+    }
   }
 
   if (loading) {
@@ -79,7 +121,7 @@ const Wallet = () => {
           My Wallet
         </h1>
         <p className="text-richblack-200 mt-2">
-          Manage your wallet balance and view transaction history
+          Manage your wallet balance and request money from admin
         </p>
       </div>
 
@@ -96,18 +138,88 @@ const Wallet = () => {
             </div>
           </div>
           <button
-            onClick={() => setShowAddMoney(true)}
+            onClick={() => setShowMoneyRequest(true)}
             className="flex items-center gap-2 bg-yellow-25 text-richblack-900 px-6 py-3 rounded-lg font-medium hover:bg-yellow-50 transition-all duration-200"
           >
             <VscAdd className="text-lg" />
-            Add Money
+            Request Money
           </button>
         </div>
       </div>
 
+      {/* Money Request Alert */}
+      <div className="bg-yellow-25/10 border border-yellow-25/20 rounded-lg p-4 mb-8">
+        <div className="flex items-start gap-3">
+          <VscWarning className="text-yellow-25 text-xl mt-0.5 flex-shrink-0" />
+          <div>
+            <h3 className="text-yellow-25 font-semibold mb-2">Important Information</h3>
+            <p className="text-richblack-200 text-sm leading-relaxed">
+              Before creating a money request, please contact the admin at{' '}
+              <span className="text-yellow-25 font-medium">admin@eduvate.in</span> to discuss your request. 
+              The admin will review and either approve or reject your request. 
+              <span className="text-red-400 font-semibold block mt-2">
+                ⚠️ Wrong or excessive requests can lead to account suspension or ban.
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Money Requests Section */}
+      <div className="bg-richblack-800 p-6 rounded-lg border border-richblack-700 mb-8">
+        <h2 className="text-xl font-semibold mb-4 text-richblack-5">Money Requests</h2>
+        
+        {moneyRequests.length === 0 ? (
+          <div className="text-center py-8">
+            <p className="text-richblack-200">No money requests yet</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {moneyRequests.map((request) => (
+              <div key={request._id} className="flex items-center justify-between p-4 bg-richblack-700 rounded-lg hover:bg-richblack-650 transition-all duration-200">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                    request.status === 'PENDING' ? 'bg-yellow-25/20' :
+                    request.status === 'APPROVED' ? 'bg-caribbeangreen-600' :
+                    'bg-pink-600'
+                  }`}>
+                    {getStatusIcon(request.status)}
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-richblack-5">₹{request.amount}</p>
+                    <p className="text-sm text-richblack-200">{request.reason}</p>
+                    <p className="text-xs text-richblack-300">{formatDate(request.createdAt)}</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <span 
+                    className="px-2 py-1 rounded-full text-xs font-medium"
+                    style={{
+                      backgroundColor: request.status === 'PENDING' ? '#E5C558' : 
+                                     request.status === 'APPROVED' ? '#10b981' : 
+                                     request.status === 'REJECTED' ? '#ef4444' : '#4b5563',
+                      color: request.status === 'PENDING' ? '#0F172A' : 
+                             request.status === 'APPROVED' ? '#ffffff' : 
+                             request.status === 'REJECTED' ? '#ffffff' : '#D1D5DB'
+                    }}
+                  >
+                    {request.status}
+                  </span>
+                  {request.adminResponse && (
+                    <p className="text-xs text-richblack-300 mt-1 max-w-xs">
+                      {request.adminResponse}
+                    </p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
       {/* Transaction History */}
       <div className="bg-richblack-800 p-6 rounded-lg border border-richblack-700">
-        <h2 className="text-xl font-semibold mb-4">Transaction History</h2>
+        <h2 className="text-xl font-semibold mb-4 text-richblack-5">Transaction History</h2>
         
         {wallet?.transactions?.length === 0 ? (
           <div className="text-center py-8">
@@ -116,7 +228,7 @@ const Wallet = () => {
         ) : (
           <div className="space-y-3">
             {wallet?.transactions?.map((transaction, index) => (
-              <div key={index} className="flex items-center justify-between p-4 bg-richblack-700 rounded-lg">
+              <div key={index} className="flex items-center justify-between p-4 bg-richblack-700 rounded-lg hover:bg-richblack-650 transition-all duration-200">
                 <div className="flex items-center gap-3">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                     transaction.type === 'CREDIT' ? 'bg-caribbeangreen-600' : 'bg-pink-600'
@@ -132,7 +244,7 @@ const Wallet = () => {
                     <p className="text-sm text-richblack-200">{formatDate(transaction.timestamp)}</p>
                   </div>
                 </div>
-                <div className={`text-lg font-bold ${
+                <div className={`text-base font-bold ${
                   transaction.type === 'CREDIT' ? 'text-caribbeangreen-400' : 'text-pink-400'
                 }`}>
                   {transaction.type === 'CREDIT' ? '+' : '-'}₹{transaction.amount}
@@ -143,14 +255,40 @@ const Wallet = () => {
         )}
       </div>
 
-      {/* Add Money Modal */}
-      {showAddMoney && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-richblack-800 p-6 rounded-lg w-full max-w-md">
-            <h3 className="text-xl font-semibold mb-4">Add Money to Wallet</h3>
-            <form onSubmit={handleAddMoney} className="space-y-4">
+      {/* Money Request Modal */}
+      {showMoneyRequest && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-richblack-800 p-6 rounded-xl w-full max-w-md border-2 border-yellow-25/20 shadow-2xl shadow-yellow-25/10">
+            {/* Header with Icon */}
+            <div className="text-center mb-6">
+              <div className="w-12 h-12 bg-yellow-25/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                <VscCreditCard className="text-2xl text-yellow-25" />
+              </div>
+              <h3 className="text-xl font-bold text-yellow-25">Request Money from Admin</h3>
+              <p className="text-richblack-300 mt-1 text-sm">Fill in the details below</p>
+            </div>
+            
+            {/* Warning Alert */}
+            <div className="bg-gradient-to-r from-red-500/10 to-red-600/10 border-2 border-red-500/20 rounded-lg p-3 mb-4">
+              <div className="flex items-start gap-2">
+                <div className="w-6 h-6 bg-red-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                  <VscWarning className="text-red-400 text-sm" />
+                </div>
+                <div>
+                  <p className="text-red-400 font-bold text-xs mb-1">⚠️ Important Notice</p>
+                  <p className="text-richblack-200 text-xs leading-relaxed">
+                    Contact <span className="text-yellow-25 font-bold">admin@eduvate.in</span> first!
+                    <span className="text-red-400 font-bold block mt-1">
+                      Wrong requests can lead to account suspension or ban.
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <form onSubmit={handleCreateMoneyRequest} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-richblack-200 mb-2">
+                <label className="block text-sm font-bold text-yellow-25 mb-2 uppercase tracking-wide">
                   Amount (₹)
                 </label>
                 <input
@@ -160,23 +298,36 @@ const Wallet = () => {
                   placeholder="Enter amount"
                   min="1"
                   required
-                  className="w-full px-3 py-2 bg-richblack-700 border border-richblack-600 rounded-lg text-richblack-5"
+                  className="w-full px-3 py-3 bg-richblack-700 border-2 border-richblack-600 rounded-lg text-richblack-5 focus:outline-none focus:border-yellow-25/50 placeholder-richblack-400 text-base font-medium transition-all duration-200"
                 />
               </div>
-              <div className="flex justify-end gap-3">
+              <div>
+                <label className="block text-sm font-bold text-yellow-25 mb-2 uppercase tracking-wide">
+                  Reason for Request
+                </label>
+                <textarea
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value)}
+                  placeholder="Explain why you need this money..."
+                  rows="3"
+                  required
+                  className="w-full px-3 py-3 bg-richblack-700 border-2 border-richblack-600 rounded-lg text-richblack-5 focus:outline-none focus:border-yellow-25/50 resize-none placeholder-richblack-400 text-sm font-medium transition-all duration-200"
+                />
+              </div>
+              <div className="flex gap-3 pt-3">
                 <button
                   type="button"
-                  onClick={() => setShowAddMoney(false)}
-                  className="px-4 py-2 text-richblack-200 hover:text-richblack-5"
+                  onClick={() => setShowMoneyRequest(false)}
+                  className="flex-1 px-4 py-3 text-richblack-300 hover:text-richblack-100 transition-all duration-200 font-bold bg-richblack-700 hover:bg-richblack-600 rounded-lg border-2 border-richblack-600 hover:border-richblack-500"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  disabled={addingMoney}
-                  className="px-4 py-2 bg-yellow-25 text-richblack-900 rounded-lg font-medium disabled:opacity-50"
+                  disabled={creatingRequest}
+                  className="flex-1 px-4 py-3 bg-gradient-to-r from-yellow-25 to-yellow-50 text-richblack-900 rounded-lg font-bold disabled:opacity-50 hover:from-yellow-50 hover:to-yellow-25 hover:scale-105 transition-all duration-200 shadow-lg shadow-yellow-25/20"
                 >
-                  {addingMoney ? 'Adding...' : 'Add Money'}
+                  {creatingRequest ? 'Creating...' : 'Submit Request'}
                 </button>
               </div>
             </form>

@@ -1,6 +1,7 @@
 const walletModel = require("../Models/wallet");
 const userModel = require("../Models/users");
 const courseModel = require("../Models/courses");
+const moneyRequestModel = require("../Models/moneyRequest");
 
 // Get wallet balance and transactions
 exports.getWallet = async (req, res) => {
@@ -214,6 +215,82 @@ exports.getInstructorRevenue = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Failed to fetch revenue analytics"
+    });
+  }
+};
+
+// Create money request
+exports.createMoneyRequest = async (req, res) => {
+  try {
+    const { amount, reason } = req.body;
+    const userId = req.user.id;
+    
+    if (!amount || amount <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Valid amount is required"
+      });
+    }
+    
+    if (!reason || reason.trim().length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Reason is required"
+      });
+    }
+    
+    // Check if user has a pending request
+    const existingRequest = await moneyRequestModel.findOne({
+      userId,
+      status: "PENDING"
+    });
+    
+    if (existingRequest) {
+      return res.status(400).json({
+        success: false,
+        message: "You already have a pending money request. Please wait for admin response."
+      });
+    }
+    
+    // Create money request
+    const moneyRequest = await moneyRequestModel.create({
+      userId,
+      amount,
+      reason: reason.trim()
+    });
+    
+    res.status(201).json({
+      success: true,
+      message: "Money request created successfully",
+      data: moneyRequest
+    });
+  } catch (error) {
+    console.error("Error creating money request:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to create money request"
+    });
+  }
+};
+
+// Get money requests for user
+exports.getMoneyRequests = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    
+    const moneyRequests = await moneyRequestModel.find({ userId })
+      .sort({ createdAt: -1 });
+    
+    res.status(200).json({
+      success: true,
+      message: "Money requests fetched successfully",
+      data: moneyRequests
+    });
+  } catch (error) {
+    console.error("Error fetching money requests:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch money requests"
     });
   }
 };

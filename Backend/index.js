@@ -14,6 +14,7 @@ const courseProgressRoutes=require("./Routes/courseProgressRoutes");
 const contactRoutes=require("./Routes/contactRoutes");
 const walletRoutes=require("./Routes/walletRoutes");
 const ratingRoutes=require("./Routes/ratingRoutes");
+const adminRoutes=require("./Routes/adminRoutes");
 app.use(express.json());
 app.use(
 	cors({
@@ -40,6 +41,7 @@ app.use("/api/v1/courseProgress",courseProgressRoutes);
 app.use("/api/v1/contact",contactRoutes);
 app.use("/api/v1/wallet",walletRoutes);
 app.use("/api/v1/rating",ratingRoutes);
+app.use("/api/v1/admin",adminRoutes);
 
 
 

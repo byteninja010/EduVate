@@ -20,43 +20,48 @@
   import EditCourse from "./Components/Core/Dashboard/EditCourse";
   import ManageCourse from "./Components/Core/Dashboard/ManageCourse";
   import Wallet from "./Components/Core/Dashboard/Wallet";
+import AdminDashboard from "./Components/Core/Dashboard/AdminDashboard";
 import EnrolledCourseView from "./pages/EnrolledCourseView";
 import Catalog from "./pages/Catalog";
 import CourseDetails from "./pages/CourseDetails";
 import Cart from "./pages/Cart";
+import BanCheck from "./Components/Common/BanCheck";
   function App() {
     return (
       <Provider store={appStore}>
-    <div className="w-screen min-h-screen bg-richblack-900 flex flex-col font-inter">
-      <Navbar></Navbar>
-      <Routes>
-        <Route path="/" element={<Home/>}> </Route>
-        <Route path="/login" element={<Login/>}></Route>
-        <Route path="/signup" element={<Signup/>}></Route>
-        <Route path="/verifyOtp" element={<OtpVerify/>}></Route>
-        <Route path="/about" element={<About/>}></Route>
-        <Route path="/contact" element={<ContactUs/>}></Route>
-        <Route path="/dashboard" element={<Dashboard/>}>
-            <Route path="myProfile" element={<MyProfile />} />
-            <Route path="settings" element={<Settings />} />
-            <Route path="enrolled-courses" element={<EnrolledCourse/>}/>
-            <Route path="instructor" element={<InstructorDashboard />} />
-            <Route path="student" element={<StudentDashboard />} />
-            <Route path="my-courses" element={<MyCourses />} />
-            <Route path="add-course" element={<AddCourse />} />
-            <Route path="edit-course/:courseId" element={<EditCourse />} />
-            <Route path="manage-course/:courseId" element={<ManageCourse />} />
-            <Route path="wallet" element={<Wallet />} />
-        </Route>
-                          <Route path="/catalog" element={<Catalog/>}></Route>
-                  <Route path="/catalog/:catalogName" element={<Catalog/>}></Route>
-        <Route path="/course/:courseId" element={<CourseDetails/>}></Route>
-        <Route path="/enrolled-course/:courseId" element={<EnrolledCourseView/>}></Route>
-        <Route path="/cart" element={<Cart/>}></Route>
-      </Routes>
-      {/* <Footer/> */}
-    </div>
-    </Provider>
+        <BanCheck>
+          <div className="w-screen min-h-screen bg-richblack-900 flex flex-col font-inter">
+            <Navbar></Navbar>
+            <Routes>
+              <Route path="/" element={<Home/>}> </Route>
+              <Route path="/login" element={<Login/>}></Route>
+              <Route path="/signup" element={<Signup/>}></Route>
+              <Route path="/verifyOtp" element={<OtpVerify/>}></Route>
+              <Route path="/about" element={<About/>}></Route>
+              <Route path="/contact" element={<ContactUs/>}></Route>
+              <Route path="/dashboard" element={<Dashboard/>}>
+                  <Route path="myProfile" element={<MyProfile />} />
+                  <Route path="settings" element={<Settings />} />
+                  <Route path="enrolled-courses" element={<EnrolledCourse/>}/>
+                  <Route path="instructor" element={<InstructorDashboard />} />
+                  <Route path="student" element={<StudentDashboard />} />
+                  <Route path="my-courses" element={<MyCourses />} />
+                  <Route path="add-course" element={<AddCourse />} />
+                  <Route path="edit-course/:courseId" element={<EditCourse />} />
+                  <Route path="manage-course/:courseId" element={<ManageCourse />} />
+                  <Route path="wallet" element={<Wallet />} />
+              </Route>
+              <Route path="/catalog" element={<Catalog/>}></Route>
+              <Route path="/catalog/:catalogName" element={<Catalog/>}></Route>
+              <Route path="/course/:courseId" element={<CourseDetails/>}></Route>
+              <Route path="/enrolled-course/:courseId" element={<EnrolledCourseView/>}></Route>
+              <Route path="/cart" element={<Cart/>}></Route>
+              <Route path="/admin" element={<AdminDashboard/>}></Route>
+            </Routes>
+            {/* <Footer/> */}
+          </div>
+        </BanCheck>
+      </Provider>
     );
   }
 

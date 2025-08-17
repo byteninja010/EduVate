@@ -95,3 +95,50 @@ export const getInstructorRevenue = async (token) => {
   toast.dismiss(toastId)
   return result
 }
+
+// Create money request
+export const createMoneyRequest = async (amount, reason, token) => {
+  const toastId = toast.loading("Creating money request...")
+  let result = null
+  try {
+    const response = await apiConnector("POST", walletEndpoints.CREATE_MONEY_REQUEST, { amount, reason }, {
+      "Authorization": `Bearer ${token}`
+    })
+    console.log("CREATE_MONEY_REQUEST_API RESPONSE............", response)
+
+    if (!response.data.success) {
+      throw new Error(response.data.message)
+    }
+    toast.success("Money request created successfully! Admin will review it.")
+    result = response.data
+  } catch (error) {
+    console.log("CREATE_MONEY_REQUEST_API ERROR............", error)
+    toast.error(error.response?.data?.message || "Failed to create money request")
+    result = error.response?.data
+  }
+  toast.dismiss(toastId)
+  return result
+}
+
+// Get money requests for user
+export const getMoneyRequests = async (token) => {
+  const toastId = toast.loading("Loading money requests...")
+  let result = null
+  try {
+    const response = await apiConnector("GET", walletEndpoints.GET_MONEY_REQUESTS, null, {
+      "Authorization": `Bearer ${token}`
+    })
+    console.log("GET_MONEY_REQUESTS_API RESPONSE............", response)
+
+    if (!response.data.success) {
+      throw new Error(response.data.message)
+    }
+    result = response.data
+  } catch (error) {
+    console.log("GET_MONEY_REQUESTS_API ERROR............", error)
+    toast.error(error.response?.data?.message || "Failed to fetch money requests")
+    result = error.response?.data
+  }
+  toast.dismiss(toastId)
+  return result
+}

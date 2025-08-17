@@ -45,7 +45,10 @@ export const walletEndpoints = {
     GET_WALLET: BASE_URL + "/wallet/getWallet",
     PURCHASE_COURSE: BASE_URL + "/wallet/purchaseCourse",
     ADD_MONEY: BASE_URL + "/wallet/addMoney",
-    GET_INSTRUCTOR_REVENUE: BASE_URL + "/wallet/getInstructorRevenue"
+    GET_INSTRUCTOR_REVENUE: BASE_URL + "/wallet/getInstructorRevenue",
+    CREATE_MONEY_REQUEST: BASE_URL + "/wallet/createMoneyRequest",
+    GET_MONEY_REQUESTS: BASE_URL + "/wallet/getMoneyRequests",
+    UPDATE_MONEY_REQUEST: BASE_URL + "/wallet/updateMoneyRequest"
 }
 
 export const ratingEndpoints = {
@@ -55,5 +58,20 @@ export const ratingEndpoints = {
     UPDATE_RATING: BASE_URL + "/rating/updateRating",
     DELETE_RATING: BASE_URL + "/rating/deleteRating",
     GET_ALL_RATINGS: BASE_URL + "/rating/getAllRatings"
+}
+
+export const adminEndpoints = {
+    GET_DASHBOARD_STATS: BASE_URL + "/admin/dashboard-stats",
+    GET_ALL_USERS: BASE_URL + "/admin/users",
+    GET_USER_DETAILS: BASE_URL + "/admin/users",
+    TOGGLE_USER_BAN: BASE_URL + "/admin/users",
+    DELETE_USER: BASE_URL + "/admin/users",
+    GET_MONEY_REQUESTS: BASE_URL + "/admin/money-requests",
+    APPROVE_MONEY_REQUEST: BASE_URL + "/admin/money-requests",
+    REJECT_MONEY_REQUEST: BASE_URL + "/admin/money-requests",
+    GET_CATEGORIES: BASE_URL + "/admin/categories",
+    CREATE_CATEGORY: BASE_URL + "/admin/categories",
+    UPDATE_CATEGORY: BASE_URL + "/admin/categories",
+    DELETE_CATEGORY: BASE_URL + "/admin/categories"
 }
   

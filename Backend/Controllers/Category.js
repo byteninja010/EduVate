@@ -105,7 +105,108 @@ exports.coursesByCategory=async(req,res)=>{
             msg:"Something went wrong while fetching course of this particular category Try later.."
         })
     }
-   
-
-
 }
+
+// Get all categories (admin route)
+exports.getCategories = async (req, res) => {
+    try {
+        const categories = await categoryModel.find({}).select('name description course').populate('course', 'title');
+        return res.status(200).json({
+            success: true,
+            data: categories,
+            message: "Categories fetched successfully"
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Error fetching categories"
+        });
+    }
+};
+
+// Update category (admin route)
+exports.updateCategory = async (req, res) => {
+    try {
+        const { categoryId } = req.params;
+        const { name, description } = req.body;
+
+        if (!name || !description) {
+            return res.status(400).json({
+                success: false,
+                message: "Name and description are required"
+            });
+        }
+
+        // Check if name already exists (excluding current category)
+        const existingCategory = await categoryModel.findOne({ 
+            name: name, 
+            _id: { $ne: categoryId } 
+        });
+        
+        if (existingCategory) {
+            return res.status(400).json({
+                success: false,
+                message: "Category name already exists"
+            });
+        }
+
+        const updatedCategory = await categoryModel.findByIdAndUpdate(
+            categoryId,
+            { name, description },
+            { new: true }
+        );
+
+        if (!updatedCategory) {
+            return res.status(404).json({
+                success: false,
+                message: "Category not found"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            data: updatedCategory,
+            message: "Category updated successfully"
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Error updating category"
+        });
+    }
+};
+
+// Delete category (admin route)
+exports.deleteCategory = async (req, res) => {
+    try {
+        const { categoryId } = req.params;
+
+        // Check if category has courses
+        const category = await categoryModel.findById(categoryId);
+        if (!category) {
+            return res.status(404).json({
+                success: false,
+                message: "Category not found"
+            });
+        }
+
+        if (category.course && category.course.length > 0) {
+            return res.status(400).json({
+                success: false,
+                message: "Cannot delete category with existing courses"
+                });
+        }
+
+        await categoryModel.findByIdAndDelete(categoryId);
+
+        return res.status(200).json({
+            success: true,
+            message: "Category deleted successfully"
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Error deleting category"
+        });
+    }
+};

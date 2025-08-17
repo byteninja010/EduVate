@@ -1,6 +1,6 @@
 const express = require("express");
 const { auth } = require("../middlewares/auth");
-const { getWallet, purchaseCourse, addMoney, getInstructorRevenue } = require("../Controllers/Wallet");
+const { getWallet, purchaseCourse, addMoney, getInstructorRevenue, createMoneyRequest, getMoneyRequests } = require("../Controllers/Wallet");
 
 const router = express.Router();
 
@@ -15,5 +15,9 @@ router.post("/addMoney", auth, addMoney);
 
 // Get instructor revenue analytics
 router.get("/getInstructorRevenue", auth, getInstructorRevenue);
+
+// Money request routes
+router.post("/createMoneyRequest", auth, createMoneyRequest);
+router.get("/getMoneyRequests", auth, getMoneyRequests);
 
 module.exports = router;
