@@ -79,7 +79,18 @@ export const login=(email,password,navigate)=>{
             localStorage.setItem("token",JSON.stringify(response.data.token));
             dispatch(setUser(response.data.user));
             localStorage.setItem("user",JSON.stringify(response.data.user));
-            navigate("/dashboard");
+            
+            // Check if there's a return URL from protected route
+            const location = window.location;
+            const searchParams = new URLSearchParams(location.search);
+            const returnUrl = searchParams.get('returnUrl') || location.state?.from?.pathname;
+            
+            // Navigate to return URL if available, otherwise to dashboard
+            if (returnUrl && returnUrl !== '/login' && returnUrl !== '/signup') {
+                navigate(returnUrl);
+            } else {
+                navigate("/dashboard");
+            }
         }catch(err){
             console.log("Login Api Errrrrror----------",err);
             toast.dismiss(toastId);
