@@ -47,7 +47,7 @@ const EnrolledCourseRoute = ({ children }) => {
         try {
           const enrolledResponse = await apiConnector(
             "GET",
-            "http://localhost:4000/api/v1/profile/getEnrolledCourses",
+            `${process.env.REACT_APP_BASE_URL || "http://localhost:4000/api/v1"}/profile/getEnrolledCourses`,
             null,
             {
               Authorization: `Bearer ${token}`,
